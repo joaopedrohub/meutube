@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Conteúdo carregado");
 
     var buttons = document.querySelectorAll("button");
 

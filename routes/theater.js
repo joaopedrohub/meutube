@@ -6,7 +6,6 @@ router.get('/:videoId', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  console.log("teste")
   res.render('videoNotFound')
 })
 

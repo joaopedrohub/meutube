@@ -145,14 +145,24 @@ body {
 
 }
 
-.reactionButton {
+.reactionButtonOff {
   border-radius: 100%;
   aspect-ratio: 1/1;
   border-style: none;
   background-color: #777777;
   font-size: 100%;
   width: 40px;
+  cursor: pointer;
+}
 
+.reactionButtonOn {
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  border-style: none;
+  background-color: #999999;
+  font-size: 100%;
+  width: 40px;
+  cursor: pointer;
 }
 
 .textPadding {
