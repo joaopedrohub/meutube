@@ -1,0 +1,175 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #111111;
+}
+
+.text {
+
+  color: #eeeeee;
+  font-weight: bold;
+
+}
+
+.textCentered {
+  margin: auto;
+  text-align: center;
+}
+
+.errorText {
+  margin: auto;
+  color: greenyellow;
+
+  text-align: center;
+  font-size: 10em;
+}
+
+.video {
+
+  display: block;
+  aspect-ratio: 16/9;
+  width: 70%;
+  border-style: groove;
+
+}
+
+.thumbnail {
+  aspect-ratio: 16/9;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 0;
+  display: block;
+  border-radius: 8px;
+}
+
+.videoCardTitle {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: left;
+  font-weight: bold;
+  color: white;
+  font-size: large;
+  padding-left: 10px;
+}
+
+.channelTitle {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 50%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.lowText {
+  display: block;
+  color: #aaaaaa;
+  font-weight: 400;
+  margin-top: 0;
+  padding-top: 0;
+  font-size: medium;
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.highText {
+  color: chartreuse;
+  font-weight: bold;
+  font-size: 5em;
+}
+
+.mediumText {
+  color: #eeeeee;
+  font-weight: 600;
+  font-size: large;
+}
+
+.highishText {
+  color: #eeeeee;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.videoCardContainer {
+  width: 95%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 15px;
+
+  margin: 75px 0px 75px;
+}
+
+.limitedText {
+
+  background-color: rgb(0, 0, 0, 0);
+  margin-top: 0;
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.expandButton {
+
+  color: #ffffff;
+  background-color: rgb(0, 0, 0, 0);
+  border-style: none;
+  font-weight: bold;
+  font-size: medium;
+  cursor: pointer;
+}
+
+.returnButton {
+
+  display: block;
+  background-color: chartreuse;
+  border-style: none;
+  border-radius: 8px;
+  margin-top: 50px;
+  width: auto;
+  height: 40px;
+  font-size: 1em;
+  cursor: pointer;
+
+}
+
+.reactionButton {
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  border-style: none;
+  background-color: #777777;
+  font-size: 100%;
+  width: 40px;
+
+}
+
+.textPadding {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.textVerticalPadding {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.videoDescriptionContainer {
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  overflow-y: scroll;
+  background-color: #111111;
+  border-radius: 8px;
+  
+}

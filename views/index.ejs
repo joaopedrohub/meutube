@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/script.js">  </script>
+  </head>
+  <body>
+    <p class="textCentered highText">Bem vindo</p>
+    <p class="textCentered mediumText"> Pegue uma pipoca e uma bebida para assistir aos vídeos. </p>
+    <div class="videoCardContainer"> 
+    
+      <% for(var i=0; i<videos.length; i++) {%>
+
+            <%- include('./partials/videocard', videos[i]) %>
+
+        <% } %>
+    
+    </div>
+    <p class= "textCentered highText"> Você chegou no final :( </p>
+  </body>
+</html>
