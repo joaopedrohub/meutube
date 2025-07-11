@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("carregad")
+    
     const likeButton = document.querySelector("#like")
     const shareButton = document.querySelector("#please")
     const dislikeButton = document.querySelector("#dislike")
 
     function choose(button, confirm) {
-        console.log("mudando")
         if (confirm) {
             button.classList.replace("reactionButtonOff", "reactionButtonOn")
         } else {

@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var theaterRouter = require("./routes/theater");
+var publishRouter = require("./routes/publish");
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/theater', theaterRouter);
+app.use('/publish', publishRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
