@@ -2,5 +2,8 @@
 
 
 # Manter a pasta, mas não o seu conteúdo
-/uploads/*
-!uploads/.gitkeep 
+/uploads/thumbnails/*
+!uploads/thumbnails/.gitkeep 
+
+/uploads/videos/*
+!uploads/videos/.gitkeep

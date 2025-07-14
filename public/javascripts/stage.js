@@ -34,6 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
         choose(shareButton, shareButton.classList.contains("reactionButtonOff"))
     })
 
-    console.log("final")
+    
 
 })

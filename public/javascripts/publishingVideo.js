@@ -38,13 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const thumbnail = document.querySelector(".thumbnail")
     const thumbnailFile = document.querySelector("#thumbnailFile")
+    const videoFile = document.querySelector("#videoFile")
 
     thumbnailFile.addEventListener("change", function() {
         const file = this.files[0]
         if (file) {
             thumbnail.src = URL.createObjectURL(file)  
         } else {
-
+            thumbnail.src = "/defaultThumbnail.png"
         }
     })
 
@@ -74,13 +75,13 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("description", descriptionInput.value)
         formData.append("tags", JSON.stringify(activeTags))
         formData.append("thumbnail", thumbnailFile.files[0])
+        formData.append("video", videoFile.files[0])
 
-        fetch("/publish", {
+        const xhr = new XMLHttpRequest()
 
-        method: 'POST',
-        body: formData
+        xhr.open("POST", "/publish")
 
-    })
+        xhr.send(formData)
     })
 
 })

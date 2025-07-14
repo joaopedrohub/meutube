@@ -5,6 +5,10 @@ var db = {
 
     ],
 
+    videosFile: [
+
+    ],
+
     thumbnails: [
 
        "/defaultThumbnail.png"
