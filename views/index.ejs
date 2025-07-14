@@ -5,6 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/texting.css' />
     <link rel='stylesheet' href='/stylesheets/videoing.css' />
+    <link rel='stylesheet' href='/stylesheets/common.css'>
     <script src="/javascripts/script.js">  </script>
   </head>
   <body>
@@ -12,9 +13,9 @@
     <p class="textCentered mediumText"> Pegue uma pipoca e uma bebida para assistir aos vídeos. </p>
     <div class="videoCardContainer"> 
     
-      <% for(var i=0; i<videos.length; i++) {%>
+      <% for(var i=0; i<videoCardInfos.length; i++) {%>
 
-            <%- include('./partials/videocard', videos[i]) %>
+            <%- include('./partials/videocard', videoCardInfos[i]) %>
 
         <% } %>
     

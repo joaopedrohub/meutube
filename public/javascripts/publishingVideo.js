@@ -30,7 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const titleInput = document.querySelector("#title")
     const videoTitle = document.querySelector("#videoTitle")
-    
+    const descriptionInput = document.querySelector("#description")
+
     document.addEventListener("input", (event) => {
         videoTitle.innerHTML = titleInput.value
     })
@@ -57,5 +58,29 @@ document.addEventListener("DOMContentLoaded", function () {
             toggleTagButton(button)
         })
     }
+
+    const publishButton = document.querySelector(".myButton")
+
+    publishButton.addEventListener("click", function() {
+        const title = titleInput.value
+
+        if (!(title.length > 1 && title.length < 48)) {
+            return
+        }
+
+        const formData = new FormData()
+
+        formData.append("title", title)
+        formData.append("description", descriptionInput.value)
+        formData.append("tags", JSON.stringify(activeTags))
+        formData.append("thumbnail", thumbnailFile.files[0])
+
+        fetch("/publish", {
+
+        method: 'POST',
+        body: formData
+
+    })
+    })
 
 })

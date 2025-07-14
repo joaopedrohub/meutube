@@ -1,7 +1,7 @@
 <div style="aspect-ratio:3/2;width:25%;border-radius: 8px;background-color: #111111; padding:6px">
-    <button style="width:100%;height:100%;background-color: transparent; border-style:none" data-id=<%= id %>  >
-        <img class="thumbnail" src=<%= thumbnail %>> 
-        <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= by[1] %>"> <%= by[0] %> </span>: <span id="videoTitle"> <%= title %> </span></p>
+    <button class="invisibleFill" data-id=<%= videoId %>  >
+        <img class="thumbnail" src="<%= thumbnail %>"> 
+        <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channelColor %>"> <%= channelName %> </span>: <span id="videoTitle"> <%= title %> </span></p>
         <p class="lowText"> <%= views %> Visualizações </p>
     </button>
 </div>

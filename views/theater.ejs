@@ -17,13 +17,12 @@
     <video class="video"> </video>
 
     <div style="background-color: #444444; border-radius: 8px;width:25%">
-      <p class="highishText" ; style="padding-left: 10px;text-align: left;"> Título do vídeo
-        manoooo </p>
-      <p class="mediumText textPadding"> Por: [nome do canal]</p>
+      <p class="highishText" ; style="padding-left: 10px;text-align: left;"> <%= video.title %> </p>
+      <p class="mediumText textPadding"> Por: <span style="color:<%= channel.color %>"> <%= channel.name %> </span> </p>
 
 
       <div style="display: flex;flex-direction: row; align-items: baseline;">
-        <p class="lowText textPadding"> 40000000 Visualizações</p>
+        <p class="lowText textPadding"> <%= video.views %> visualizações</p>
 
         <div class="textCentered" style="margin-top: 30px;margin-bottom: 60px;">
 
@@ -46,7 +45,7 @@
       <p class="mediumText textPadding textCentered"> Descrição do vídeo: </p>
 
       <div class="videoDescriptionContainer textPadding">
-        <p class="limitedText text textVerticalPadding"> Essda daqui fdsiafjcosdicjnuioasdunasduicvnasuicniaosudnfiucsaudncuasuip9iodcioasdo
+        <p class="limitedText text textVerticalPadding"> <%= video.description %>
         </p>
 
       </div>

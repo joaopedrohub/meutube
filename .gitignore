@@ -1,1 +1,6 @@
 /node_modules
+
+
+# Manter a pasta, mas não o seu conteúdo
+/uploads/*
+!uploads/.gitkeep 
