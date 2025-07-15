@@ -20,6 +20,17 @@ class Validator {
 
         return string.replace(regex, " ")
     }
+
+    isAlphanumericString(string) {
+        const regex = /[^\w]/
+
+        if (string.match(regex)) {
+            return true 
+        } else {
+            return false
+        }
+
+    }
 }
 
 module.exports = Validator

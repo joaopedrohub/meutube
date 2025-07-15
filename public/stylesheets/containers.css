@@ -1,0 +1,30 @@
+.mainGreyRectangle {
+
+    width: 90%;
+    height: 90%;
+    background-color: #333333;
+    border-radius: 8px;
+
+}
+
+.smallVerticalGreyRectangle {
+    display: block;
+    aspect-ratio: 2/3;
+    width: 20%;
+    background-color: #333333;
+
+    border-radius: 8px;
+
+}
+
+.verticalFlex {
+    display: flex;
+    flex-direction: column;
+}
+
+.staticBody {
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0
+}

@@ -17,8 +17,8 @@ var db = {
 
     channels: [
 
-        {id: 0, name: "Eu", color: "#3498dd"}
 
+        
     ]
 
 

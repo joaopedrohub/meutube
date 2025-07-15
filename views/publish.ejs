@@ -10,39 +10,23 @@
     <link rel='stylesheet' href='/stylesheets/texting.css' />
     <link rel='stylesheet' href='/stylesheets/videoing.css' />
     <link rel="stylesheet" href="/stylesheets/common.css" />
+    <link rel="stylesheet" href="/stylesheets/containers.css" />
+    <link rel="stylesheet" href="/stylesheets/positioning.css" />
+
     <script src="/javascripts/publishingVideo.js"> </script>
     <style>
         html,
         body {
-            height: 100vh;
-            margin: 0;
             font-family: Verdana;
             background-color: #adff2f;
-        }
-
-        .backgroundFrame {
-
-            position: absolute;
-
-            top: 5%;
-            left: 5%;
-
-            display: block;
-            width: 90%;
-            height: 90%;
-            background-color: #333333;
-            margin: auto;
-
-            border-radius: 8px;
-
         }
     </style>
 </head>
 
 
-<body>
+<body class="staticBody">
 
-    <div class="backgroundFrame">
+    <div class="mainGrayRectangle vhcenter">
         <div id="workshop" style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
             <p class="highishText" style="padding:0;margin: 0;"> Publique seu vídeo </p>
             <textarea id="title" placeholder="Título do vídeo" class="inputBox"></textarea>
