@@ -17,35 +17,49 @@
     <video class="video" src="<%= videoURL %>" controls> </video>
 
     <div style="background-color: #444444; border-radius: 8px;width:25%">
-      <p class="highishText" ; style="padding-left: 10px;text-align: left;"> <%= video.title %> </p>
-      <p class="mediumText textPadding"> Por: <span style="color:<%= channel.color %>"> <%= channel.name %> </span> </p>
+      <p class="highishText" ; style="padding-left: 10px;text-align: left;">
+        <%= video.title %>
+      </p>
+      <p class="mediumText textPadding"> Por: <span style="color:<%= channel.color %>">
+          <%= channel.name %>
+        </span> </p>
 
+      <p class="lowText textPadding">
+        <%= video.views %> visualizações
+      </p>
 
-      <div style="display: flex;flex-direction: row; align-items: baseline;">
-        <p class="lowText textPadding"> <%= video.views %> visualizações</p>
+      <div style="display: flex;flex-direction: row; justify-content: center;column-gap: 5%;">
 
-        <div class="textCentered" style="margin-top: 30px;margin-bottom: 60px;">
-
-          <button class="reactionButtonOff" id = "like" title="Eu gostei desse vídeo!">
+        <div>
+          <button class="reactionButtonOff" id="like" title="Eu gostei desse vídeo!">
             <img alt="❤️">
           </button>
+          <p class="textCentered mediumText"> 0 </p>
 
-          <button class="reactionButtonOff" id = "please" title="Eu quero que outras pessoas vejam esse vídeo!">
+        </div>
+
+        <div>
+          <button class="reactionButtonOff" id="please" title="Eu quero que outras pessoas vejam esse vídeo!">
             <img alt="📣">
           </button>
+          <p class="textCentered mediumText"> 0 </p>
 
+        </div>
+
+        <div>
           <button class="reactionButtonOff" id="dislike" title="Não gostei desse vídeo!">
             <img alt="💔">
           </button>
-
+          <p class="textCentered  mediumText"> 0 </p>
         </div>
 
       </div>
 
-      <p class="mediumText textPadding textCentered"> Descrição do vídeo: </p>
+      <p class="mediumText textPadding textCentered" style="margin-top: 10%;"> Descrição do vídeo: </p>
 
       <div class="videoDescriptionContainer textPadding">
-        <p class="limitedText text textVerticalPadding"> <%= video.description %>
+        <p class="limitedText text textVerticalPadding">
+          <%= video.description %>
         </p>
 
       </div>
