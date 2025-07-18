@@ -1,9 +1,9 @@
 .inputBox {
-    padding: 5px;
-    color: #ffffff;
-    background-color: #222222;
-    border-style: solid;
-    border-radius: 4px;
+  padding: 5px;
+  color: #ffffff;
+  background-color: #222222;
+  border-style: solid;
+  border-radius: 4px;
 }
 
 .coolInputBox {
@@ -23,33 +23,38 @@
 }
 
 .myButton {
-    background-color: #adff2f;
-    border-style: none;
-    border-radius: 4px;
-    aspect-ratio: 16/9;
-    width: 80px;
-    cursor: pointer;
+  background-color: #adff2f;
+  border-style: none;
+  border-radius: 4px;
+  aspect-ratio: 16/9;
+  width: 80px;
+  cursor: pointer;
+}
+
+.disabledMyButton {
+  background-color: #777777;
+  cursor: none
 }
 
 .disabledTagButton {
-    border-style: solid;
-    border-radius: 4px;
-    min-height: 25%;
-    max-height: 100px;
-    background-color: #222222;
-    color: #ffffff;
-    cursor: pointer;
+  border-style: solid;
+  border-radius: 4px;
+  min-height: 25%;
+  max-height: 100px;
+  background-color: #222222;
+  color: #ffffff;
+  cursor: pointer;
 
 }
 
 .enabledTagButton {
-    border-style: solid;
-    border-radius: 4px;
-    min-height: 25%;
-    max-height: 100px;
-    background-color: #dddddd;
-    color: #222222;
-    cursor: pointer;
+  border-style: solid;
+  border-radius: 4px;
+  min-height: 25%;
+  max-height: 100px;
+  background-color: #dddddd;
+  color: #222222;
+  cursor: pointer;
 }
 
 .expandButton {
@@ -96,3 +101,6 @@
   cursor: pointer;
 }
 
+.invalidInput {
+  border-color: rgb(180, 37, 37);
+}

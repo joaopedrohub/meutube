@@ -18,7 +18,7 @@ router.get('/:videoId', function(req, res, next) {
       next()
     }
   } else {
-    next()
+    res.render('videoNotFound')
   }
   
 });

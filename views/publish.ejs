@@ -26,7 +26,7 @@
 
 <body class="staticBody">
 
-    <div class="mainGrayRectangle vhcenter">
+    <div class="mainGreyRectangle vhcenter">
         <div id="workshop" style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
             <p class="highishText" style="padding:0;margin: 0;"> Publique seu vídeo </p>
             <textarea id="title" placeholder="Título do vídeo" class="inputBox"></textarea>
@@ -72,7 +72,7 @@
         <div style="position:absolute; left:63.5%;top:5%;aspect-ratio:16/9;width:25%">
             <button class="invisibleFill">
                 <img class="thumbnail">
-                <p class="videoCardTitle"> <span class="channelTitle" style="color: #adff2f"> vc </span>: <span id="videoTitle"> título do vídeo </span></p>
+                <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channel.color %>"> <%= channel.name %> </span>: <span id="videoTitle"> título do vídeo </span></p>
                 <p class="lowText"> 0 Visualizações </p>
             </button>
 

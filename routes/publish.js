@@ -3,6 +3,8 @@ var router = express.Router()
 const multer = require('multer')
 const Validator = require('../models/Validator')
 const Video = require("../models/Video")
+const {authTokenMiddleware, secretKey} = require("../models/Authenticator")
+const jwt = require("jsonwebtoken")
 
 const validator = new Validator()
 
@@ -50,7 +52,20 @@ const upload = multer({
 var db = require("../testdb")
 
 router.get('/', function (req, res, next) {
-    res.render('publish')
+    const token = req.cookies.token
+
+    if (!token) {
+        return res.status(401).send("Você não está logado")
+    }
+
+    try {
+        const channel = jwt.verify(token, secretKey)
+        res.render('publish', {channel: channel})
+    } catch (error) {
+        res.status(403).send("Token falso safado")
+    }
+
+    
 })
 
 const multerMiddleware = upload.fields([
@@ -72,7 +87,7 @@ router.post('/', multerMiddleware, function (req, res) {
         
         if (validator.isStringLengthInRange(title, 1, 48) && validator.isStringLengthInRange(description, 0, 1024)) {
             const newVideo = new Video(title, description)
-
+            
             const videoFile = req.files.video[0]
             const videoFile_index = db.videosFile.push("/uploads/videos/" + videoFile.filename) - 1
             

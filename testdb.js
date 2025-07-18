@@ -17,7 +17,14 @@ var db = {
 
     channels: [
 
+        {
+            id: 0,
+            name: "Eu",
+            password: "123",
+            color: "#349208",
+            videos: []
 
+        }
         
     ]
 

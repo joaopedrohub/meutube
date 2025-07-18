@@ -1,6 +1,11 @@
 class Validator {
 
-    constructor() {}
+    constructor() {
+
+        this.hexColorRegex = /^#[0-9A-F]{6}$/i
+        this.nonAlphanumericRegex = /[^\w]/
+
+    }
 
     isStringLengthInRange(string, min, max) {
         if (string.length >= min  && string.length <= max ) {
@@ -19,17 +24,6 @@ class Validator {
         const regex = /\s{2,}/g // o g é para que detecte globalmente (caso haja mais de uma ocorrência)
 
         return string.replace(regex, " ")
-    }
-
-    isAlphanumericString(string) {
-        const regex = /[^\w]/
-
-        if (string.match(regex)) {
-            return true 
-        } else {
-            return false
-        }
-
     }
 }
 

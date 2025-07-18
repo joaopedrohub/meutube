@@ -41,6 +41,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   console.log("Erro capturado: " + err.message)
+  console.log(err.stack)
   res.status(err.status || 500);
   res.render('error');
 });
