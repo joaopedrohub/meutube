@@ -10,10 +10,9 @@ class Video {
         this.description = description
         this.date = Date.now()
         this.views = 0
-
-    }
-
-    setThumbnail() {
+        this.likes = 0
+        this.shares = 0
+        this.dislikes = 0
 
     }
 }
