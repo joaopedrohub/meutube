@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Theater</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/texting.css' />
+    <link rel='stylesheet' href='/stylesheets/inputs.css' />
+    <link rel='stylesheet' href='/stylesheets/positioning.css' />
+  </head>
+  <body>
+      <h1 class="errorText"> 401 </h1>
+      <p class="mediumText textCentered">You need to be logged in order to acess this page</p>
+      <button class="myButton vhcenter"> Log </button>
+
+      <script> 
+        const button = document.querySelector("button")
+        button.addEventListener("click", function() {
+            window.location.href = "http://localhost:3000/gate/login"
+        })
+
+      </script> 
+    
+  </body>
+</html>

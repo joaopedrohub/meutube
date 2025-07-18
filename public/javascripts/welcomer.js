@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             document.cookie = `token=${data.token}; path=/; max-age=86400` // depois manda o cookie pelo backend
             console.log("cookie feito!")
-            window.location.href = "localhost:3000/"
+            window.location.href = "http://localhost:3000/"
         }) 
         .catch(error => {
             console.warn(error.stack)

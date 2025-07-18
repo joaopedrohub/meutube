@@ -55,7 +55,7 @@ router.get('/', function (req, res, next) {
     const token = req.cookies.token
 
     if (!token) {
-        return res.status(401).send("Você não está logado")
+        return res.status(401).render("unlogged")
     }
 
     try {
