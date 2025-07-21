@@ -22,9 +22,28 @@
     flex-direction: column;
 }
 
+.horizontalFlex {
+    display: flex;
+    flex-direction: row;
+}
+
 .staticBody {
     height: 100vh;
     overflow: hidden;
     margin: 0;
     padding: 0
+}
+
+.sidebar {
+    position: fixed;
+    left:0;
+    top: 0;
+    height: 100%;
+    width: 15%;
+    margin-right: auto;
+    background-color: #131313;
+}
+
+.sidebarItem {
+    width: 100%;
 }

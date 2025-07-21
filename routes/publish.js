@@ -74,9 +74,10 @@ const multerMiddleware = upload.fields([
 ])
 
 
-router.post('/', multerMiddleware, function (req, res) {
+router.post('/', multerMiddleware, authTokenMiddleware, function (req, res) {
     const body = { ...req.body} // isso é necessário para que o objeto ganhe os métodos de um object (hasOwnProperty, especificamente)
     const requiredInfo = ['title', 'description', 'tags']
+    const channel = db.channels[req.channel.id]
 
     const hasNecessaryInfo = requiredInfo.every((property) => body.hasOwnProperty(property))
     if (hasNecessaryInfo) {
@@ -86,7 +87,7 @@ router.post('/', multerMiddleware, function (req, res) {
         const tags = body.tags
         
         if (validator.isStringLengthInRange(title, 1, 48) && validator.isStringLengthInRange(description, 0, 1024)) {
-            const newVideo = new Video(title, description)
+            const newVideo = new Video(title, description, channel)
             
             const videoFile = req.files.video[0]
             const videoFile_index = db.videosFile.push("/uploads/videos/" + videoFile.filename) - 1
@@ -101,6 +102,7 @@ router.post('/', multerMiddleware, function (req, res) {
                 
             }
 
+            channel.videos.push(newVideo.id)
             const index = db.videos.push(newVideo) - 1
             newVideo.id = index
 
@@ -109,9 +111,8 @@ router.post('/', multerMiddleware, function (req, res) {
 
 
     } else {
-        res.status(400).send("Malformed publish request.")
+        res.status(400).json({reason: "Falta informação"})
     }
-
 
 })
 

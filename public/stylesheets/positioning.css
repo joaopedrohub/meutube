@@ -16,6 +16,24 @@
     padding: 5%
 }
 
+.zeroPadding {
+    padding: 0;
+}
+
 .downMargin{
     margin-bottom: 30px;
+}
+
+.zeroVerticalMargin {
+    margin-top: 0;
+    margin-bottom: 0; 
+}
+
+.negativeVerticalMargin {
+    margin-top: -12px;
+    margin-bottom: -12px;
+}
+
+.zeroBottomMargin {
+    margin-bottom: 0;
 }

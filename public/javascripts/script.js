@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-    var buttons = document.querySelectorAll("button");
+    
+    var buttons = document.querySelectorAll("#videoButton");
 
     buttons.forEach(function (button) {
         var children = button.children;
@@ -30,5 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(button.dataset.id)
             window.location.href = "/theater/" + button.dataset.id;
         });
+    
     });
 });

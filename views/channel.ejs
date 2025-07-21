@@ -8,12 +8,10 @@
     <link rel='stylesheet' href='/stylesheets/common.css'>
     <link rel='stylesheet' href='/stylesheets/containers.css'>
     <link rel='stylesheet' href='/stylesheets/positioning.css'>
-    <script src="/javascripts/script.js">  </script>
   </head>
   <body class="zeroPadding">
     <%- include('./partials/sidebar') %>
-    <p class="textCentered highText">Bem vindo</p>
-    <p class="textCentered mediumText"> Pegue uma pipoca e uma bebida para assistir aos vídeos. </p>
+    <p class="textCentered highText" style="color: <%= color %>"> <%= name %> </p>
     <div class="videoCardContainer"> 
     
       <% for(var i=0; i<videoCardInfos.length; i++) {%>
@@ -23,6 +21,6 @@
         <% } %>
     
     </div>
-    <p class= "textCentered highText"> Você chegou no final :( </p>
+    <p class= "textCentered highText"> Esse foi o canal da <span style="color: <%= color %>"> <%= name %> </span> </p>
   </body>
 </html>

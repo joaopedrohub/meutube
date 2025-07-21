@@ -1,10 +1,10 @@
 class Video {
 
-    constructor(title, description) {
+    constructor(title, description, channel) {
         this.id = 0
         this.videoFile_id = 0
         this.thumbnail_id = 0 
-        this.by = 0
+        this.by = channel.id
 
         this.title = title
         this.description = description

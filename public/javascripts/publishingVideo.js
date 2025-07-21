@@ -81,6 +81,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         xhr.open("POST", "/publish")
 
+        xhr.withCredentials = true
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    console.log(xhr.responseText)
+                }
+            }
+        }
+
         xhr.send(formData)
     })
 
