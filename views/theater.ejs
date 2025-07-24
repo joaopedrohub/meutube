@@ -7,6 +7,8 @@
   <link rel='stylesheet' href='/stylesheets/texting.css' />
   <link rel='stylesheet' href='/stylesheets/videoing.css' />
   <link rel='stylesheet' href='/stylesheets/inputs.css' />
+  <link rel='stylesheet' href='/stylesheets/sizing.css' />
+  <link rel='stylesheet' href='/stylesheets/positioning.css' />
   <script src="/javascripts/stage.js">  </script>
 </head>
 
@@ -55,12 +57,12 @@
 
       </div>
 
-      <div>
-        <% for(var i=0; i<tags.length; i++) {%>
+      <div class="inputBox halfWidth hcenter horizontalFlex">
+        <% tags.forEach(function(tag) { %>
 
-            <%- include('./partials/tagCard', {name: tags[i].name, color: tags[i].color}) %>
+          <button class="enabledTagButton" style="background-color: <%= tag.color %>"> <%= tag.name %> </button>
 
-        <% } %>
+      <% }); %>
         
       </div>
 

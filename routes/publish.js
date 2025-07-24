@@ -61,7 +61,8 @@ router.get('/', function (req, res, next) {
 
     try {
         const channel = jwt.verify(token, secretKey)
-        res.render('publish', {channel: channel})
+        const tags = db.tags
+        res.render('publish', {channel: channel, tags: tags})
     } catch (error) {
         res.status(403).send("Token falso safado")
     }
@@ -110,7 +111,7 @@ router.post('/', multerMiddleware, authTokenMiddleware, function (req, res) {
                 tag = tag.toLowerCase()
                 tag = validator.removeStringBlankSpace(tag)
                 if (db.tags.find((databaseTag) => databaseTag.name == tag)) {
-                    newVideo.tags.push(databaseTag)
+                    newVideo.tags.push(tag)
                 }
             })
 

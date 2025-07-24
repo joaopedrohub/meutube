@@ -35,20 +35,13 @@
             <div>
                 <p class="lowText"> Selecione temas que representem o vídeo (máx: 3)</p>
                 <div id="tagBox" class="inputBox" style="display:flex;column-gap: 5px;row-gap:5px;flex-wrap:wrap;overflow-y:auto;aspect-ratio: 3/1;width:40%;">
+                    
+                    <% tags.forEach(function(tag) { %>
 
-                    <button class="disabledTagButton"> Jogos </button>
-                    <button class="disabledTagButton"> Maquiagem </button>
-                    <button class="disabledTagButton"> Gamedev </button>
-                    <button class="disabledTagButton"> Programação </button>
-                    <button class="disabledTagButton"> Educativo </button>
-                    <button class="disabledTagButton"> Biologia </button>
-                    <button class="disabledTagButton"> Esportes </button>
-                    <button class="disabledTagButton"> Experimental </button>
-                    <button class="disabledTagButton"> Culinária </button>
-                    <button class="disabledTagButton"> Vlogs </button>
-                    <button class="disabledTagButton"> Reacts </button>
-                    <button class="disabledTagButton"> Animes </button>
-                    <button class="disabledTagButton"> Filmes </button>
+                        <button class="disabledTagButton textCentered" data-color="<%= tag.color %>"> <%= tag.name %> </button>
+            
+                    <% }); %>
+
                 </div>
             </div>
 

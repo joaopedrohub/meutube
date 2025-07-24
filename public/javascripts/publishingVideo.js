@@ -12,6 +12,7 @@ function toggleTagButton(button) {
         activeTags.push(tag)
 
         button.classList.replace("disabledTagButton", "enabledTagButton")
+        button.style.backgroundColor = button.dataset.color
 
     } else {
         const tag = button.innerHTML
@@ -19,6 +20,7 @@ function toggleTagButton(button) {
         if (index> -1) {
             activeTags.splice(index, 1)
             button.classList.replace("enabledTagButton", "disabledTagButton")
+            button.style.backgroundColor = ''
         } 
     }
     console.log(activeTags)

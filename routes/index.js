@@ -22,12 +22,7 @@ router.get('/', function(req, res, next) {
 
   }
 
-
   res.render('index', {videoCardInfos: videoCardInfos});
-
-
-
-
 });
 
 module.exports = router;
