@@ -1,3 +1,5 @@
+const Tag = require("./models/tag")
+
 var db = {
 
     videos: [
@@ -26,9 +28,15 @@ var db = {
 
         }
         
+    ],
+
+    tags: [
+        new Tag("vlog", "#3776db"),
+        new Tag("gameplay", "#e0332d"),
+        new Tag("experimental", "#ffffff"),
+        new Tag("conversa", "#f28b88"),
+        new Tag("culinária", "#ffffff"),
     ]
-
-
 }
 
 module.exports = db

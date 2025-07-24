@@ -50,6 +50,7 @@ const upload = multer({
 })
 
 var db = require("../testdb")
+const { json } = require('express')
 
 router.get('/', function (req, res, next) {
     const token = req.cookies.token
@@ -101,10 +102,24 @@ router.post('/', multerMiddleware, authTokenMiddleware, function (req, res) {
                 newVideo.thumbnail_id = thumbnail_index
                 
             }
+            
+            // fatorar tags
+            const tags = JSON.parse(body.tags)
+    
+            tags.forEach((tag) => {
+                tag = tag.toLowerCase()
+                tag = validator.removeStringBlankSpace(tag)
+                if (db.tags.find((databaseTag) => databaseTag.name == tag)) {
+                    newVideo.tags.push(databaseTag)
+                }
+            })
+
 
             channel.videos.push(newVideo.id)
             const index = db.videos.push(newVideo) - 1
             newVideo.id = index
+
+            console.log(newVideo)
 
         }
         

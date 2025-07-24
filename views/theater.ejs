@@ -55,6 +55,15 @@
 
       </div>
 
+      <div>
+        <% for(var i=0; i<tags.length; i++) {%>
+
+            <%- include('./partials/tagCard', {name: tags[i].name, color: tags[i].color}) %>
+
+        <% } %>
+        
+      </div>
+
       <p class="mediumText textPadding textCentered" style="margin-top: 10%;"> Descrição do vídeo: </p>
 
       <div class="videoDescriptionContainer textPadding">

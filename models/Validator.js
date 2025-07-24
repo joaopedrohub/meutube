@@ -25,6 +25,13 @@ class Validator {
 
         return string.replace(regex, " ")
     }
+
+    removeStringBlankSpace(string) {
+        const regex = /\s/g
+
+        return string.replace(regex, "")
+    }
+
 }
 
 module.exports = Validator
