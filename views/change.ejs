@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Publicar um vídeo</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/inputs.css' />
+    <link rel='stylesheet' href='/stylesheets/texting.css' />
+    <link rel='stylesheet' href='/stylesheets/videoing.css' />
+    <link rel="stylesheet" href="/stylesheets/common.css" />
+    <link rel="stylesheet" href="/stylesheets/containers.css" />
+    <link rel="stylesheet" href="/stylesheets/positioning.css" />
+    <link rel="stylesheet" href="/stylesheets/sizing.css" />
+
+    <style>
+        html,
+        body {
+            font-family: Verdana;
+            background-color: #adff2f;
+        }
+    </style>
+</head>
+
+
+<body class="staticBody">
+
+    <div class="mainGreyRectangle vhcenter">
+        <div id="workshop"
+            style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
+            <p class="highishText" class="zeroPadding"> Edite seu vídeo </p>
+            <textarea id="title" placeholder="Título do vídeo" class="inputBox"><%= video.title %></textarea>
+            <textarea id="description" placeholder="Descrição do vídeo"
+                class="inputBox"><%= video.description %></textarea>
+
+            <div>
+
+                <p class="lowText"> Selecione uma nova thumbnail </p>
+                <input id="thumbnailFile" type="file" accept="image/*" alt="Selecione a nova Thumbnail"
+                    class="inputBox">
+
+            </div>
+
+            
+
+        </div>
+
+        <div style="position:absolute; left:63.5%;top:5%;aspect-ratio:16/9;width:25%">
+            <button class="invisibleFill">
+                <img class="thumbnail" src="<%= thumbnailPath %>">
+                <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channel.color %>">
+                        <%= channel.name %>
+                    </span>: <span id="videoTitle">
+                        <%= video.title %>
+                    </span></p>
+                <p class="lowText">
+                    <%= video.views %> Visualizações
+                </p>
+            </button>
+        </div>
+
+        <button id="confirmButton"class="myButton" style="position:absolute;bottom:3%;right:3%"> Confirmar </button>
+        <button id="deleteButton" class="inputBox defaultButton" style="position:absolute;bottom:3%;left:3%"> Excluir vídeo </button>
+    </div>
+</body>
+
+</html>

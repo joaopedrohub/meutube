@@ -1,30 +1,3 @@
-function toggleTagButton(button) {
-
-    const on = !activeTags.find((tag) => tag == button.innerHTML)
-
-    if (on) {
-        
-        if (activeTags.length == 3) {
-            return 
-        }
-
-        const tag = button.innerHTML
-        activeTags.push(tag)
-
-        button.classList.replace("disabledTagButton", "enabledTagButton")
-
-    } else {
-        const tag = button.innerHTML
-        const index = activeTags.findIndex((otherTag) => tag == otherTag)
-        if (index> -1) {
-            activeTags.splice(index, 1)
-            button.classList.replace("enabledTagButton", "disabledTagButton")
-        } 
-    }
-    console.log(activeTags)
-}
-
-var activeTags = []
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -49,20 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
+    const confirmButton = document.querySelector("#confirmButton")
+    const deleteButton = document.querySelector("deleteButton")
 
-
-    var allTagButtons = document.querySelector("#tagBox").children
-
-    for (var i = 0; i < allTagButtons.length; i++) {
-        const button = allTagButtons[i]
-        button.addEventListener("click", function() {
-            toggleTagButton(button)
-        })
-    }
-
-    const publishButton = document.querySelector(".myButton")
-
-    publishButton.addEventListener("click", function() {
+    confirmButton.addEventListener("click", function() {
         const title = titleInput.value
 
         if (!(title.length > 1 && title.length < 48)) {
@@ -73,13 +36,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         formData.append("title", title)
         formData.append("description", descriptionInput.value)
-        formData.append("tags", JSON.stringify(activeTags))
         formData.append("thumbnail", thumbnailFile.files[0])
-        formData.append("video", videoFile.files[0])
 
         const xhr = new XMLHttpRequest()
 
-        xhr.open("POST", "/studio/publish")
+        xhr.open("POST", "/studio/change")
 
         xhr.withCredentials = true
 
@@ -92,6 +53,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         xhr.send(formData)
+    })
+
+    deleteButton.addEventListener("click", function() {
+        const videoId = path.match(/studio\/change\/([^/]+)/);
+
+        const xhr = new XMLHttpRequest()
+
+        xhr.open("DELETE", "/studio/change/" + videoId)
+        xhr.withCredentials = true
+
     })
 
 })

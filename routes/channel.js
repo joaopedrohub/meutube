@@ -3,10 +3,9 @@ var router = express.Router();
 
 const VideoCardInfo = require("../models/VideoCardInfo")
 
-const db = require("../testdb")
+const db = require("../testdb");
+const { authTokenMiddleware } = require('../models/Authenticator');
 
-
-/* GET home page. */
 router.get('/:channelName', function (req, res, next) {
     const channel = db.channels.find((channel) => channel.name == req.params.channelName)
 
@@ -29,5 +28,11 @@ router.get('/:channelName', function (req, res, next) {
     }
 
 });
+
+router.get('/', authTokenMiddleware ,function(req,res,next) {
+
+    res.redirect("http://localhost:3000/channel/" + req.channel.name)
+    //pegar o cookie se tiver e levar o cara pro canal dele 
+})
 
 module.exports = router;

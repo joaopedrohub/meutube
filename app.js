@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var theaterRouter = require("./routes/theater");
-var publishRouter = require("./routes/publish");
+var studioRouter = require("./routes/studio");
 var gateRouter = require("./routes/gate")
 var channelRouter = require("./routes/channel")
 
@@ -25,7 +25,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
 app.use('/theater', theaterRouter);
-app.use('/publish', publishRouter);
+app.use('/studio', studioRouter);
 app.use('/gate', gateRouter)
 app.use('/channel', channelRouter)
 
