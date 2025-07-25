@@ -8,6 +8,7 @@ class Video {
 
         this.title = title
         this.description = description
+        this.tags = []
         this.date = Date.now()
         this.views = 0
         this.likes = 0

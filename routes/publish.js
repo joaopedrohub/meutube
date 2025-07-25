@@ -50,6 +50,7 @@ const upload = multer({
 })
 
 var db = require("../testdb")
+const { json } = require('express')
 
 router.get('/', function (req, res, next) {
     const token = req.cookies.token
@@ -60,7 +61,8 @@ router.get('/', function (req, res, next) {
 
     try {
         const channel = jwt.verify(token, secretKey)
-        res.render('publish', {channel: channel})
+        const tags = db.tags
+        res.render('publish', {channel: channel, tags: tags})
     } catch (error) {
         res.status(403).send("Token falso safado")
     }
@@ -101,10 +103,24 @@ router.post('/', multerMiddleware, authTokenMiddleware, function (req, res) {
                 newVideo.thumbnail_id = thumbnail_index
                 
             }
+            
+            // fatorar tags
+            const tags = JSON.parse(body.tags)
+    
+            tags.forEach((tag) => {
+                tag = tag.toLowerCase()
+                tag = validator.removeStringBlankSpace(tag)
+                if (db.tags.find((databaseTag) => databaseTag.name == tag)) {
+                    newVideo.tags.push(tag)
+                }
+            })
+
 
             channel.videos.push(newVideo.id)
             const index = db.videos.push(newVideo) - 1
             newVideo.id = index
+
+            console.log(newVideo)
 
         }
         

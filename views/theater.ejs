@@ -7,6 +7,8 @@
   <link rel='stylesheet' href='/stylesheets/texting.css' />
   <link rel='stylesheet' href='/stylesheets/videoing.css' />
   <link rel='stylesheet' href='/stylesheets/inputs.css' />
+  <link rel='stylesheet' href='/stylesheets/sizing.css' />
+  <link rel='stylesheet' href='/stylesheets/positioning.css' />
   <script src="/javascripts/stage.js">  </script>
 </head>
 
@@ -53,6 +55,15 @@
           <p class="textCentered  mediumText"> 0 </p>
         </div>
 
+      </div>
+
+      <div class="inputBox halfWidth hcenter horizontalFlex">
+        <% tags.forEach(function(tag) { %>
+
+          <button class="enabledTagButton" style="background-color: <%= tag.color %>"> <%= tag.name %> </button>
+
+      <% }); %>
+        
       </div>
 
       <p class="mediumText textPadding textCentered" style="margin-top: 10%;"> Descrição do vídeo: </p>
