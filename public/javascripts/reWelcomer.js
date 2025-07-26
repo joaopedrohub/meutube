@@ -2,23 +2,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const nameInput = document.querySelector("#name")
     const passwordInput = document.querySelector("#password")
-    const colorInput = document.querySelector("#color")
+    const loginButton = document.querySelector("#login")
     const infoText = document.querySelector("#infoText")
-
-    const createButton = document.querySelector("#create")
 
     const nameRegex = /[^\w]/
     const passwordRegex = nameRegex
 
-    function toggleCreateButton(on) {
+    function toggleLoginButton(on) {
         if (on) {
-            createButton.classList.remove("disabledMyButton")
-            createButton.classList.add("myButton")
-            createButton.disabled = false
+            loginButton.classList.remove("disabledMyButton")
+            loginButton.classList.add("myButton")
+            loginButton.disabled = false
         } else {
-            createButton.classList.remove("myButton")
-            createButton.classList.add("disabledMyButton")
-            createButton.disabled = true
+            loginButton.classList.remove("myButton")
+            loginButton.classList.add("disabledMyButton")
+            loginButton.disabled = true
         }
     }
 
@@ -51,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             needsToDisableButton = true
         }
 
-        toggleCreateButton(!needsToDisableButton)
+        toggleLoginButton(!needsToDisableButton)
 
         return true
     }
@@ -62,20 +60,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     passwordInput.addEventListener("input", updateInputs)
 
-    createButton.addEventListener("click", function () {
+    loginButton.addEventListener("click", function () {
 
         nameInput.readOnly = true
         passwordInput.readOnly = true
-        createButton.disabled = true
+        loginButton.disabled = true
 
         const name = nameInput.value
         const password = passwordInput.value
-        const color = colorInput.value
 
-        fetch('/gate/signin', {
+        fetch("/gate/login", {
             method: "POST",
-            headers: { "Content-type": "application/json" },
-            body: JSON.stringify({ name: name, password: password, color: color })
+            headers: { "content-Type": "application/json" },
+            body: JSON.stringify({ name: name, password: password })
         })
             .then(async response => {
                 const status = response.status
@@ -88,26 +85,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 return { status, data }
+
             })
             .then(result => {
 
                 if (result.status == 200) {
                     document.cookie = `token=${result.data.token}; path=/; max-age=86400` // depois manda o cookie pelo backend
                     window.location.href = "http://localhost:3000/"
+                } else if (result.status == 401) {
+                    infoText.innerText = "Nome ou senha incorretos"
+                } else if (result.status == 400) {
+                    infoText.innerText = "Falta informação"
                 } else {
-                    infoText.innerText = result.data.reason
+                    infoText.innerText = "Erro desconhecido"
                 }
 
-            })
-            .catch(error => {
-                console.warn(error.stack)
-            })
 
+            })
+        
         nameInput.readOnly = false
         passwordInput.readOnly = false
-        createButton.disabled = false
-
-
+        loginButton.disabled = false
+        
     })
-
 })

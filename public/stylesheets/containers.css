@@ -25,6 +25,7 @@
 .horizontalFlex {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .staticBody {
@@ -50,4 +51,25 @@
 
 .rounded {
     border-radius: 8px;
+}
+
+.smallGap {
+    column-gap: 5px;
+    row-gap: 2px;
+}
+
+.invisible {
+    display: none;
+}
+
+.frontCard {
+    aspect-ratio: 5/3;
+    width: 500px;
+    max-width: 60%;
+    background-color: #333333;
+    border-radius: 9px;
+
+    outline-color: rgb(0,0,0,.6);
+    outline-width: 100vw;
+    outline-style: solid;
 }

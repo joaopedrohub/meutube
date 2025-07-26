@@ -2,6 +2,10 @@
     width: 50%;
 }
 
+.quarterWidth {
+    width: 25%
+}
+
 .square {
     aspect-ratio: 1/1;
     width: 10%;

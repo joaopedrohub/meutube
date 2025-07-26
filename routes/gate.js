@@ -27,16 +27,16 @@ router.post('/signin', function(req,res) {
     if (hasNecessaryInfo) {
 
         if (body.name.match(validator.nonAlphanumericRegex) || body.password.match(validator.nonAlphanumericRegex)) {
-            return res.status(401)
+            return res.status(400).json({reason: "Nome ou senha contém caractéres inválidos"})
         }
 
-        const nameTaken = db.channels.find((channel) => channel.name == body.name)
+        const nameTaken = db.channels.find((channel) => channel.name.toLowerCase() == body.name.toLowerCase())
         if (nameTaken) {
-            res.status(401).json({sucess: 0, reason: "Outro canal já tem esse nome."})
+            res.status(401).json({reason: "Outro canal já tem esse nome."})
         }
 
         if (!body.color.match(validator.hexColorRegex)) {
-            res.status(401).json({sucess: 0, reason: "A cor que você mandou não é um hex válido."})
+            res.status(400).json({reason: "A cor que você mandou não é um hex válido."})
         }
 
         const newChannel = new Channel(body.name, body.password)
@@ -51,37 +51,35 @@ router.post('/signin', function(req,res) {
 
         const token = jwt.sign(channelPayload, secretKey, {expiresIn: '24h'})
 
-        res.json({sucess: 1, token: token})
+        res.status(200).json({token: token})
         
     } else {
-        res.status(401).json({sucess: 0, reason: "Falta informação."})
+        res.status(400).json({reason: "Falta informação."})
     }
 })
 
-router.post('/login', authTokenMiddleware, function(req,res) {
+router.post('/login', function(req,res) {
     const body = req.body
-
     const requiredInfo = ['name', 'password']
     const hasNecessaryInfo = requiredInfo.every((property) => body.hasOwnProperty(property))
-
     if (hasNecessaryInfo) {
 
         if (body.name.match(validator.nonAlphanumericRegex) || body.password.match(validator.nonAlphanumericRegex)) {
-            return res.status(401)
+            
+            return res.sendStatus(400)
         }
         
         const channel = db.channels.find((channel) => channel.name === body.name && channel.password === body.password)
 
         if (!channel) {
-            res.status(401)
+            res.sendStatus(401)
         }
 
         const token = jwt.sign({id: channel.id, name: body.name}, secretKey, {expiresIn: '24h'})
 
-        res.json({token})
-        res.redirect("/")
+        res.status(200).json({token}).redirect("/")
     } else {
-        res.status(401)
+        res.sendStatus(400)
     }
 })
 

@@ -37,3 +37,17 @@
 .zeroBottomMargin {
     margin-bottom: 0;
 }
+
+.zeroHorizontalMargin {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.horizontalPadding {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.tenPadding {
+    padding: 10px;
+}

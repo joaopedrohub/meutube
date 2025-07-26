@@ -94,3 +94,7 @@
   overflow: hidden;
   vertical-align: bottom;
 }
+
+.redText {
+  color: #ff1212
+}

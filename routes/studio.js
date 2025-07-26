@@ -61,7 +61,7 @@ router.get('/publish', function (req, res, next) {
 
     try {
         const channel = jwt.verify(token, secretKey)
-        res.render('publish', {channel: channel})
+        res.render('publish', {channel: channel, tags: db.tags})
     } catch (error) {
         res.status(403).send("Token falso safado")
     }
@@ -83,11 +83,10 @@ router.post('/publish', publishMulterMiddleware, authTokenMiddleware, function (
     const channel = db.channels[req.channel.id]
 
     const hasNecessaryInfo = requiredInfo.every((property) => body.hasOwnProperty(property))
-    if (hasNecessaryInfo) {
-        var title = body.title
+    if (hasNecessaryInfo && req.files.video[0] && req.files.thumbnail[0]) {
+        let title = body.title
         title = validator.trimStringBlankSpace(title)
         const description = body.description
-        const tags = body.tags
         
         if (validator.isStringLengthInRange(title, 1, 48) && validator.isStringLengthInRange(description, 0, 1024)) {
             const newVideo = new Video(title, description, channel)
@@ -104,17 +103,30 @@ router.post('/publish', publishMulterMiddleware, authTokenMiddleware, function (
                 newVideo.thumbnail_id = thumbnail_index
                 
             }
+            
+             // fatorar tags
+            const tags = JSON.parse(body.tags)
+    
+            tags.forEach((tag) => {
+                tag = tag.toLowerCase()
+                tag = validator.removeStringBlankSpace(tag)
+                if (db.tags.find((databaseTag) => databaseTag.name == tag)) {
+                    newVideo.tags.push(tag)
+                }
+            })
 
             channel.videos.push(newVideo.id)
             const index = db.videos.push(newVideo) - 1
             newVideo.id = index
 
-        }
-        
+            res.sendStatus(200)
 
+        } else {
+            res.status(400).json({reason: "Título ou descrição não estão dentro do limite de 1 a 48 caracteres e 0 a 1024 caracteres respectivamente."})
+        }
 
     } else {
-        res.status(400).json({reason: "Falta informação"})
+        res.status(400).json({reason: "Faltou você enviar alguma coisa... :("})
     }
 
 })
@@ -191,8 +203,8 @@ router.delete('/change/:id', authTokenMiddleware, function(req,res,next) {
             fs.unlink(thumbnailPath, (error) => {
                 console.log("Erro ao apagar arquivo: " + error.stack)
             })
-        ) // deleta isso e continua fazendo
-            res.sendStatus(200).redirect("localhost:3000//")
+         // deleta isso e continua fazendo
+            res.sendStatus(200).redirect("/")
         }
     }
     

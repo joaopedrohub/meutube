@@ -3,9 +3,9 @@ function toggleTagButton(button) {
     const on = !activeTags.find((tag) => tag == button.innerHTML)
 
     if (on) {
-        
+
         if (activeTags.length == 3) {
-            return 
+            return
         }
 
         const tag = button.innerHTML
@@ -17,55 +17,84 @@ function toggleTagButton(button) {
     } else {
         const tag = button.innerHTML
         const index = activeTags.findIndex((otherTag) => tag == otherTag)
-        if (index> -1) {
+        if (index > -1) {
             activeTags.splice(index, 1)
             button.classList.replace("enabledTagButton", "disabledTagButton")
             button.style.backgroundColor = ''
-        } 
+        }
     }
-    console.log(activeTags)
 }
 
-var activeTags = []
+let activeTags = []
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
     const titleInput = document.querySelector("#title")
     const videoTitle = document.querySelector("#videoTitle")
     const descriptionInput = document.querySelector("#description")
-
-    document.addEventListener("input", (event) => {
-        videoTitle.innerHTML = titleInput.value
-    })
-
+    const helper = document.querySelector("#helper")
+    const helperTextArea = document.querySelector("#helperTextArea")
     const thumbnail = document.querySelector(".thumbnail")
-    const thumbnailFile = document.querySelector("#thumbnailFile")
-    const videoFile = document.querySelector("#videoFile")
+    const thumbnailFileInput = document.querySelector("#thumbnailFile")
+    const videoFileInput = document.querySelector("#videoFile")
+    const publishButton = document.querySelector("#publishButton")
 
-    thumbnailFile.addEventListener("change", function() {
-        const file = this.files[0]
+    function setThumbnailPreview(file) {
         if (file) {
-            thumbnail.src = URL.createObjectURL(file)  
+            thumbnail.src = URL.createObjectURL(file)
         } else {
             thumbnail.src = "/defaultThumbnail.png"
         }
+    }
+
+    function updatePublishButton() {
+        if (titleInput.value.length > 0 && titleInput.value.length <= 48 && thumbnailFileInput.files[0] && videoFileInput.files[0]) {
+            publishButton.classList.remove("disabledMyButton")
+            publishButton.classList.add("myButton")
+        } else {
+            publishButton.classList.remove("myButton")
+            publishButton.classList.add("disabledMyButton")
+        }
+    }
+
+    function insertLine(text) {
+        helperTextArea.innerHTML += "<br>" + text
+    }
+
+    titleInput.addEventListener("input", (event) => {
+        videoTitle.innerHTML = titleInput.value
+        updatePublishButton()
     })
 
+    thumbnailFileInput.addEventListener("change", function () {
+        const file = thumbnailFileInput.files[0]
+        setThumbnailPreview(file)
+        updatePublishButton()
+    })
 
+    videoFileInput.addEventListener("change", function() {
+        const file = videoFileInput.files[0]
+        updatePublishButton()
+    })
 
-    var allTagButtons = document.querySelector("#tagBox").children
+    let allTagButtons = document.querySelector("#tagBox").children
 
-    for (var i = 0; i < allTagButtons.length; i++) {
+    //colocar os eventos das tags
+    for (let i = 0; i < allTagButtons.length; i++) {
         const button = allTagButtons[i]
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
             toggleTagButton(button)
         })
     }
 
-    const publishButton = document.querySelector(".myButton")
+    updatePublishButton()
+    if (thumbnailFileInput.files[0]) {setThumbnailPreview(thumbnailFileInput.files[0])}
 
-    publishButton.addEventListener("click", function() {
+    publishButton.addEventListener("click", function () {
         const title = titleInput.value
+        helper.classList.remove("invisible")
 
         if (!(title.length > 1 && title.length < 48)) {
             return
@@ -76,8 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("title", title)
         formData.append("description", descriptionInput.value)
         formData.append("tags", JSON.stringify(activeTags))
-        formData.append("thumbnail", thumbnailFile.files[0])
-        formData.append("video", videoFile.files[0])
+        formData.append("thumbnail", thumbnailFileInput.files[0])
+        formData.append("video", videoFileInput.files[0])
 
         const xhr = new XMLHttpRequest()
 
@@ -85,10 +114,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         xhr.withCredentials = true
 
-        xhr.onreadystatechange = function() {
+        xhr.upload.onprogress = function (event) {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100)
+                insertLine("Estou recebendo seu vídeo... " + percent + "%")
+            }
+        }
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
-                    console.log(xhr.responseText)
+                    insertLine("Recebi o seu vídeo! Irei publicar ele ;)")
+                } else {
+                    console.log("oxe")
+                    console.log(xhr.response, xhr.responseText, xhr.responseType)
                 }
             }
         }
