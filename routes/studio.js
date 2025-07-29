@@ -3,9 +3,10 @@ var router = express.Router()
 const multer = require('multer')
 const Validator = require('../models/Validator')
 const Video = require("../models/Video")
-const {authTokenMiddleware, secretKey} = require("../models/Authenticator")
+const { authTokenMiddleware, isLoggedMiddleware } = require("../models/Authenticator")
 const jwt = require("jsonwebtoken")
 const fs = require("fs")
+const prisma = require('../prisma/client')
 
 const validator = new Validator()
 
@@ -26,9 +27,9 @@ const videoFileTypeWhitelist = [
 
 const allTypesWhiteList = imageFileTypeWhitelist.concat(videoFileTypeWhitelist)
 
-const upload = multer({ 
+const upload = multer({
     storage: multer.diskStorage({
-        destination: function(req, file, cb) {
+        destination: function (req, file, cb) {
             if (imageFileTypeWhitelist.find((mimetype) => mimetype == file.mimetype)) {
 
                 cb(null, "uploads/thumbnails")
@@ -37,8 +38,8 @@ const upload = multer({
             } else {
                 cb(new Error("Formato de arquivo inválido"))
             }
-        },  
-    }), 
+        },
+    }),
     fileFilter: (req, file, cb) => {
         if (allTypesWhiteList.find((mimetype) => mimetype == file.mimetype)) {
             cb(null, true)
@@ -47,167 +48,253 @@ const upload = multer({
             cb(null, false)
         }
     },
-    limits: {fileSize: 50 * 1000000}// x megabytes
+    limits: { fileSize: 50 * 1000000 }// x megabytes
 })
 
-var db = require("../testdb")
+router.get('/publish', authTokenMiddleware, async function (req, res, next) {
 
-router.get('/publish', function (req, res, next) {
-    const token = req.cookies.token
+    const tags = await prisma.tag.findMany()
+    res.render('publish', { channel: req.channel, tags: tags })
 
-    if (!token) {
-        return res.status(401).render("unlogged")
-    }
-
-    try {
-        const channel = jwt.verify(token, secretKey)
-        res.render('publish', {channel: channel, tags: db.tags})
-    } catch (error) {
-        res.status(403).send("Token falso safado")
-    }
-
-    
 })
 
 const publishMulterMiddleware = upload.fields([
-    {name: "thumbnail", maxCount: 1},
-    {name: "video", maxCount: 1}
+    { name: "thumbnail", maxCount: 1 },
+    { name: "video", maxCount: 1 }
 ])
 
 const changeMulterMiddleware = upload.single("thumbnail")
 
-
-router.post('/publish', publishMulterMiddleware, authTokenMiddleware, function (req, res) {
-    const body = { ...req.body} // isso é necessário para que o objeto ganhe os métodos de um object (hasOwnProperty, especificamente)
+router.post('/publish', publishMulterMiddleware, authTokenMiddleware, async function (req, res) {
+    const body = { ...req.body } // isso é necessário para que o objeto ganhe os métodos de um object (hasOwnProperty, especificamente)
     const requiredInfo = ['title', 'description', 'tags']
-    const channel = db.channels[req.channel.id]
+    const channel = req.channel
 
     const hasNecessaryInfo = requiredInfo.every((property) => body.hasOwnProperty(property))
     if (hasNecessaryInfo && req.files.video[0] && req.files.thumbnail[0]) {
+
+        const prisma = require("../prisma/client")
+
         let title = body.title
         title = validator.trimStringBlankSpace(title)
         const description = body.description
-        
+
         if (validator.isStringLengthInRange(title, 1, 48) && validator.isStringLengthInRange(description, 0, 1024)) {
-            const newVideo = new Video(title, description, channel)
-            
+
             const videoFile = req.files.video[0]
-            const videoFile_index = db.videosFile.push("/uploads/videos/" + videoFile.filename) - 1
-            
-            newVideo.videoFile_id = videoFile_index
+            const videoFilePath = "/uploads/videos/" + videoFile.filename
 
-            const thumbnail = req.files.thumbnail[0]
-
-            if (thumbnail) {
-                const thumbnail_index = db.thumbnails.push("/uploads/thumbnails/" + thumbnail.filename) - 1
-                newVideo.thumbnail_id = thumbnail_index
-                
+            const thumbnailFile = req.files.thumbnail[0]
+            let thumbnailFilePath
+            if (thumbnailFile) {
+                thumbnailFilePath = "/uploads/thumbnails/" + thumbnailFile.filename
+            } else {
+                thumbnailFilePath = "/defaultThumbnail"
             }
-            
-             // fatorar tags
+
+
             const tags = JSON.parse(body.tags)
-    
-            tags.forEach((tag) => {
-                tag = tag.toLowerCase()
-                tag = validator.removeStringBlankSpace(tag)
-                if (db.tags.find((databaseTag) => databaseTag.name == tag)) {
-                    newVideo.tags.push(tag)
-                }
-            })
+            let newVideo
+            try {
+                newVideo = await prisma.video.create({
+                    data: {
+                        title: title,
+                        description: description,
+                        videoPath: videoFilePath,
+                        thumbnailPath: thumbnailFilePath,
+                        channelId: channel.id,
 
-            channel.videos.push(newVideo.id)
-            const index = db.videos.push(newVideo) - 1
-            newVideo.id = index
+                        tags: {
+                            connect: tags.map((name) => ({ name }))
+                        }
 
-            res.sendStatus(200)
+
+                    }
+
+                })
+            } catch (error) {
+                console.error(error.message)
+                res.status(500).json({ reason: "Desculpa. Não consegui criar o vídeo. Talvez você tenha enviado uma tag que não existe? :(" })
+            }
+
+
+            res.sendStatus(201)
 
         } else {
-            res.status(400).json({reason: "Título ou descrição não estão dentro do limite de 1 a 48 caracteres e 0 a 1024 caracteres respectivamente."})
+            res.status(400).json({ reason: "Título ou descrição não estão dentro do limite de 1 a 48 caracteres e 0 a 1024 caracteres respectivamente." })
         }
 
     } else {
-        res.status(400).json({reason: "Faltou você enviar alguma coisa... :("})
+        res.status(400).json({ reason: "Faltou você enviar alguma coisa... :(" })
     }
 
 })
 
-router.get('/change/:id', authTokenMiddleware, function(req, res, next) {
-    const video = db.videos[req.params.id]
+router.get('/change/:id', authTokenMiddleware, async function (req, res, next) {
+
+    const videoId = parseInt(req.params.id)
+    const channel = req.channel
+
+    const prisma = require("../prisma/client")
+
+    let video
+    try {
+        video = await prisma.video.findFirst({ where: { id: videoId } })
+    } catch (error) {
+        console.error(error)
+    }
+
     if (video) {
-        const channel = db.channels[video.by]
-        if (channel && video.by == req.channel.id) {
-            console.log("permitido")
-            const thumbnail = db.thumbnails[video.thumbnail_id]
-            res.render("change", {video: video, channel: channel, thumbnailPath: thumbnail})
+        if (video.channelId == channel.id) {
+            const thumbnailPath = video.thumbnailPath
+            res.render("change", { video: video, channel: channel, thumbnailPath: thumbnailPath })
         } else {
-            console.log("dfsaf")
-            res.render("videoNotFound")
-        } 
+            res.render("unlogged") // na verdade é não autorizado
+        }
     } else {
-        console.log("sad")
         res.render("videoNotFound")
     }
 })
 
-router.put('/change', changeMulterMiddleware, authTokenMiddleware, function(req, res, next) {
-    const body = {...req.body}
-    
-    const requiredInfo = ['videoId', 'title', 'description']
+router.put('/change/:id', changeMulterMiddleware, authTokenMiddleware, async function (req, res, next) {
+    const body = { ...req.body }
+
+    const requiredInfo = ['title', 'description']
     const hasNecessaryInfo = requiredInfo.every((property) => body.hasOwnProperty(property))
 
     if (hasNecessaryInfo) {
-        const video = db.videos[body.videoId]
+
+        const prisma = require("../prisma/client")
+
+        const title = validator.trimStringBlankSpace(body.title)
+        const videoId = parseInt(req.params.id)
+
+        let [sucess, reason] = validator.isValidVideoTitle(title)
+        if (!sucess) {
+            res.status(400).send({ reason: reason })
+        }
+
+        [sucess, reason] = validator.isValidVideoDescription(body.description)
+        if (!sucess) {
+            res.status(400).send({ reason: reason })
+        }
+
+        let video
+
+        try {
+            video = await prisma.video.findFirst({ where: { id: videoId } })
+        } catch (error) {
+            console.log(error)
+            res.render("videoNotFound")
+        }
+
         if (video) {
             //vídeo achado, verificar se as credenciais batem
-            if (video.by == req.channel.id) {
+            if (video.channelId == req.channel.id) {
                 // válido
-                video.title = body.title
-                video.description = body.description
                 if (req.file) {
-                    const oldThumbnail_Index = video.thumbnail_id
-                    const oldThumbnailPath = db.thumbnails[oldThumbnail_Index]
-                    const newThumbnail_index = db.thumbnails.push("/uploads/thumbnails/" + req.filename) - 1
-                    video.thumbnail_id = newThumbnail_index
+                    const oldThumbnailPath = video.thumbnailPath
 
                     fs.unlink(oldThumbnailPath, (error) => {
                         if (error) {
                             console.log("Erro ao apagar arquivo: " + error.stack)
                         }
                     })
-                    db.thumbnails[oldThumbnail_Index] = null
+
+                    const newThumbnailPath = "/uploads/thumbnails/" + req.file.filename
+
+                    try {
+                        await prisma.video.update({
+                            where: {
+                                id: videoId
+                            },
+                            data: {
+                                title: title,
+                                description: body.description,
+                                thumbnailPath: newThumbnailPath
+                            }
+                        })
+                    } catch (error) {
+                        console.log(error)
+                        res.status(500).send({ reason: "Ocorreu um erro ao editar o seu vídeo :(" })
+
+                    }
+
+                } else {
+
+                    try {
+                        await prisma.video.update({
+                            where: {
+                                id: videoId
+                            },
+                            data: {
+                                title: title,
+                                description: body.description
+                            }
+                        })
+                    } catch (error) {
+                        console.log(error)
+                        res.status(500).send({ reason: "Ocorreu um erro ao editar o seu vídeo :(" })
+                    }
                 }
                 res.sendStatus(200)
             }
 
         } else {
-            
+            res.sendStatus(404)
         }
 
     }
 })
 
-router.delete('/change/:id', authTokenMiddleware, function(req,res,next) {
-    
-    if (req.params.id) {
-        const video = db.thumbnails.video[body.videoId]
-        if (video && video.by == req.channel.id) { 
-            const videoFilePath = db.videosFile[video.videoFile_id]
-            const thumbnailPath = db.thumbnails[video.thumbnail_id]
+router.delete('/change/:id', authTokenMiddleware, async function (req, res, next) {
 
-            db.videos[video.id] = null
 
-            fs.unlink(videoFilePath, (error) =>{
+    const videoId = parseInt(req.params.id)
+    const prisma = require("../prisma/client")
+
+    let video
+
+    try {
+        video = await prisma.video.findFirst({
+            where: {
+                id: videoId
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ reason: "Ocorreu um erro ao deletar o seu vídeo :(" })
+
+    }
+
+    if (video) {
+
+        //achamos o vídeo, mas será que quem quer deletar ele é o dono do vídeo?
+
+        if (video.channelId == req.channel.id) {
+            const thumbnailPath = video.thumbnailPath
+            const videoPath = video.videoPath
+
+            fs.unlink(videoPath, (error) => {
                 console.log("Erro ao apagar arquivo: " + error.stack)
             })
 
             fs.unlink(thumbnailPath, (error) => {
                 console.log("Erro ao apagar arquivo: " + error.stack)
             })
-         // deleta isso e continua fazendo
-            res.sendStatus(200).redirect("/")
+            try {
+                await prisma.video.delete({ where: { id: video.id } })
+            } catch (error) {
+                console.log(error)
+                res.status(500).send({reson: "Ocorreu um erro ao deletar o seu vídeo :("})
+            }
+            res.sendStatus(200)
+        } else {
+            res.status(401).json({reason: "Você não tem permissão para apagar esse vídeo... Suspeito... Certeza que está na conta correta?"})
         }
     }
-    
+
+
 })
 
 module.exports = router

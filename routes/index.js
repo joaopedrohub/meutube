@@ -7,22 +7,34 @@ const db = require("../testdb")
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', async function (req, res, next) {
 
-  const videos = db.videos
-  const channels = db.channels
+  const prisma = require('../prisma/client')
+
+  const videos = await prisma.video.findMany({ take: 10 })
 
   var videoCardInfos = []
 
+  let channelsCache = new Map()
+
   for (var i = 0; i < videos.length; i++) {
     const video = videos[i]
-    const channel = channels[video.by]
+    const channelId = video.channelId
+
+    let channel
+
+    if (channelsCache.get(channelId)) {
+      channel = channelsCache.get(channelId)
+    } else {
+      channel = await prisma.channel.findUnique({ where: { id: channelId } })
+      channelsCache.set(channelId)
+    }
 
     videoCardInfos.push(new VideoCardInfo(video, channel))
 
   }
 
-  res.render('index', {videoCardInfos: videoCardInfos});
+  res.render('index', { videoCardInfos: videoCardInfos });
 });
 
 module.exports = router;

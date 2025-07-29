@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const descriptionInput = document.querySelector("#description")
     const helper = document.querySelector("#helper")
     const helperTextArea = document.querySelector("#helperTextArea")
+    const helperButton = helper.querySelector("button")
     const thumbnail = document.querySelector(".thumbnail")
     const thumbnailFileInput = document.querySelector("#thumbnailFile")
     const videoFileInput = document.querySelector("#videoFile")
@@ -59,8 +60,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function insertLine(text) {
+    function insertLine(text, enableButton, redirect) {
         helperTextArea.innerHTML += "<br>" + text
+        if (enableButton) {
+            helperButton.classList.replace("disabledMyButton", "myButton")
+            helperButton.disabled = false
+        }
+        if (redirect) {
+            helperButton.addEventListener("click", function() {
+                window.location.href = "http://localhost:3000/channel/"
+            })
+        }
     }
 
     titleInput.addEventListener("input", (event) => {
@@ -113,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         xhr.open("POST", "/studio/publish")
 
         xhr.withCredentials = true
+        xhr.responseType = 'json'
 
         xhr.upload.onprogress = function (event) {
             if (event.lengthComputable) {
@@ -123,11 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    insertLine("Recebi o seu vídeo! Irei publicar ele ;)")
+                if (xhr.status == 201) {
+                    insertLine("Recebi o seu vídeo! Irei publicar ele ;)", true, true)
                 } else {
-                    console.log("oxe")
-                    console.log(xhr.response, xhr.responseText, xhr.responseType)
+                    insertLine(xhr.response.reason, true)
                 }
             }
         }

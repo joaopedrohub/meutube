@@ -90,8 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(result => {
 
                 if (result.status == 200) {
-                    document.cookie = `token=${result.data.token}; path=/; max-age=86400` // depois manda o cookie pelo backend
                     window.location.href = "http://localhost:3000/"
+                    
+                    
                 } else if (result.status == 401) {
                     infoText.innerText = "Nome ou senha incorretos"
                 } else if (result.status == 400) {

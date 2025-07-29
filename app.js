@@ -35,16 +35,31 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+//app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  //res.locals.message = err.message;
+  //res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  console.log("Erro capturado: " + err.message)
-  console.log(err.stack)
-  res.status(err.status || 500);
-  res.render('error');
+  //console.log("Erro capturado: " + err.message)
+  //console.log(err.stack)
+  //res.status(err.status || 500);
+  //res.render('error');
+//});
+
+// Middleware de captura de erros
+app.use((err, req, res, next) => {
+  console.error("🔴 Erro capturado no middleware de erro:");
+  console.error(err); // log completo do erro
+
+  // Tente renderizar uma view de erro, mas com fallback
+  try {
+    res.status(err.status || 500).render('error', { message: err.message || "Erro interno do servidor", error: err });
+  } catch (e) {
+    console.error("⚠️ Falha ao renderizar a view de erro:", e);
+    res.status(500).send("Erro interno ao processar o erro.");
+  }
 });
+
 
 module.exports = app;

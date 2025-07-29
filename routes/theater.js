@@ -1,37 +1,43 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
+const jwt = require('jsonwebtoken');
+const { isLoggedMiddleware } = require('../models/Authenticator');
 
-var db = require("../testdb")
+router.get('/:videoId', isLoggedMiddleware, async function (req, res, next) {
+  const prisma = require('../prisma/client')
 
-router.get('/:videoId', function(req, res, next) {
-  
-  const videoId = req.params.videoId
-  const video = db.videos.find((video) => video.id == videoId)
+  const videoId = parseInt(req.params.videoId)
+
+  const video = await prisma.video.findUnique({ where: { id: videoId }, include: { tags: true } })
 
   if (video) {
-    const channel = db.channels.find((channel) => video.by == channel.id)
-    video.views += 1
-    const videoURL = db.videosFile[video.videoFile_id]
+    const channelId = video.channelId
+    const channel = await prisma.channel.findUnique({ where: { id: channelId } })
+    const videoURL = video.videoPath
+
     if (channel) {
+      
+      if (req.logged) {
 
-      // resgatar as tags 
-      const tags = []
-      video.tags.forEach((videoTag) => {
-        const databaseTag = db.tags.find((databaseTag) => databaseTag.name == videoTag) // no vídeo, as tags são armazenadas somente com texto, mas no db, há nome e cor 
-        tags.push(databaseTag)
-      })
+        prisma.video.update({
+          where: {id: videoId},
+          data: {views: {increment: 1}}
+        }).catch((reason) => console.error("Erro ao incrementar visualização: " + reason))
 
-      res.render("theater", {video: video, channel: channel, videoURL: videoURL, tags: tags});
+      }
+
+      res.render("theater", { video: video, channel: channel, videoURL: videoURL, tags: video.tags });
+
     } else {
-      next()
+      res.render("videoNotFound")
     }
   } else {
     res.render('videoNotFound')
   }
-  
+
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('videoNotFound')
 })
 

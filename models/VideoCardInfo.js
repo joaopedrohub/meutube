@@ -7,7 +7,7 @@ class VideoCardInfo {
 
         this.videoId = video.id
         this.title = video.title
-        this.thumbnail = db.thumbnails[video.thumbnail_id]
+        this.thumbnail = video.thumbnailPath
         this.channelName = channel.name
         this.channelColor = channel.color
         this.views = video.views

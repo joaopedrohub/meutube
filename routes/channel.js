@@ -6,22 +6,43 @@ const VideoCardInfo = require("../models/VideoCardInfo")
 const db = require("../testdb");
 const { authTokenMiddleware } = require('../models/Authenticator');
 
-router.get('/:channelName', function (req, res, next) {
-    const channel = db.channels.find((channel) => channel.name == req.params.channelName)
+router.get('/:channelName', async function (req, res, next) {
+
+    const prisma = require("../prisma/client")
+
+    let channel
+
+    try {
+        channel = await prisma.channel.findFirst({ where: { name: req.params.channelName } })
+    } catch (error) {
+        console.log(error)
+        res.status(404).render('videoNotFound')
+    }
 
     if (channel) {
-
-        var videoCardInfos = []
-        const channelVideos = channel.videos
-
-        for (var i = 0; i < channelVideos.length; i++) {
-            const video = db.videos[channelVideos[i]]
-
-            videoCardInfos.push(new VideoCardInfo(video, channel))
-
+        let videos
+        try {
+            videos = await prisma.video.findMany({
+                where: { channelId: channel.id },
+            })
+        } catch (error) {
+            console.log(error)
+            videos = false
         }
 
-        res.render("channel", { name: channel.name, color: channel.color, videoCardInfos: videoCardInfos})
+        if (videos) {
+            let videoCardInfos = []
+            for (let i = 0; i < videos.length; i++) {
+                const video = videos[i]
+
+                videoCardInfos.push(new VideoCardInfo(video, channel))
+
+            }
+
+            res.render("channel", { name: channel.name, color: channel.color, videoCardInfos: videoCardInfos })
+        } else {
+            res.render("channel", { name: channel.name, color: channel.color, videoCardInfos: false })
+        }
 
     } else {
         res.render("videoNotFound")
@@ -29,7 +50,7 @@ router.get('/:channelName', function (req, res, next) {
 
 });
 
-router.get('/', authTokenMiddleware ,function(req,res,next) {
+router.get('/', authTokenMiddleware, function (req, res, next) {
 
     res.redirect("http://localhost:3000/channel/" + req.channel.name)
     //pegar o cookie se tiver e levar o cara pro canal dele 

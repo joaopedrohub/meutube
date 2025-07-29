@@ -15,18 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        if (thumbnail) {
-            button.addEventListener("mouseenter", function () {
-                div.style.backgroundColor = "#444444"
-            });
-
-            button.addEventListener("mouseleave", function () {
-                div.style.backgroundColor = "#111111"
-            });
-        }
-
         button.addEventListener("click", function () {
-            console.log(button.dataset.id)
             window.location.href = "/theater/" + button.dataset.id;
         });
     

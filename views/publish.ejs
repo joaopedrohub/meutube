@@ -39,7 +39,7 @@
                     
                     <% tags.forEach(function(tag) { %>
 
-                        <button class="disabledTagButton textCentered zeroHorizontalMargin" data-color="<%= tag.color %>"> <%= tag.name %> </button>
+                        <button class="disabledTagButton textCentered zeroHorizontalMargin" data-color="<%= tag.color %>"><%= tag.name %></button>
             
                     <% }); %>
 
@@ -73,12 +73,7 @@
 
     </div>
 
-    <div id="helper" class="invisible vhcenter frontCard verticalFlex tenPadding"> 
-        <p class="mediumText"> O servidor diz: </p>
-        <p id="helperTextArea" class="coolInputBox hcenter" style="width:90%;height:50%" readonly>Opa, eu to aqui mano!</p>
-
-
-    </div>
+    <%- include('./partials/helper', {title: "O servidor diz:"}) %>
 </body>
 
 </html>

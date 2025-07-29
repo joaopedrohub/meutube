@@ -9,11 +9,10 @@
     <link rel='stylesheet' href='/stylesheets/inputs.css' />
     <link rel='stylesheet' href='/stylesheets/texting.css' />
     <link rel='stylesheet' href='/stylesheets/videoing.css' />
-    <link rel="stylesheet" href="/stylesheets/common.css" />
     <link rel="stylesheet" href="/stylesheets/containers.css" />
     <link rel="stylesheet" href="/stylesheets/positioning.css" />
     <link rel="stylesheet" href="/stylesheets/sizing.css" />
-
+    <script src="/javascripts/changingVideo.js"> </script>
     <style>
         html,
         body {
@@ -62,7 +61,10 @@
 
         <button id="confirmButton"class="myButton" style="position:absolute;bottom:3%;right:3%"> Confirmar </button>
         <button id="deleteButton" class="inputBox defaultButton" style="position:absolute;bottom:3%;left:3%"> Excluir vídeo </button>
+
+        
     </div>
+    <%- include('./partials/helper', {title: "O servidor diz:"})%>
 </body>
 
 </html>
