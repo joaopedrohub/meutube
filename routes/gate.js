@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 const { authTokenMiddleware, secretKey } = require('../models/Authenticator')
 const Validator = require("../models/Validator")
 const Channel = require("../models/Channel")
-const db = require("../testdb");
+
 
 
 const validator = new Validator()

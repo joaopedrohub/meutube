@@ -3,7 +3,6 @@ var router = express.Router();
 
 const VideoCardInfo = require("../models/VideoCardInfo")
 
-const db = require("../testdb");
 const { authTokenMiddleware } = require('../models/Authenticator');
 
 router.get('/:channelName', async function (req, res, next) {
