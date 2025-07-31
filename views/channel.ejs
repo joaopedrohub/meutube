@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= name %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/texting.css' />
-    <link rel='stylesheet' href='/stylesheets/videoing.css' />
-    <link rel='stylesheet' href='/stylesheets/containers.css'>
-    <link rel='stylesheet' href='/stylesheets/positioning.css'>
-    <script src="/javascripts/videoCardActivator.js">  </script>
-  </head>
-  <body class="zeroPadding">
+
+<head>
+  <title>
+    <%= name %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='/stylesheets/texting.css' />
+  <link rel='stylesheet' href='/stylesheets/videoing.css' />
+  <link rel='stylesheet' href='/stylesheets/containers.css'>
+  <link rel='stylesheet' href='/stylesheets/positioning.css'>
+  <link rel='stylesheet' href='/stylesheets/imaging.css'>
+  <script src="/javascripts/videoCardActivator.js">  </script>
+</head>
+
+<body class="staticBody">
+  <div class="horizontalFlex">
+
     <%- include('./partials/sidebar') %>
-    <p class="textCentered highText" style="color: <%= color %>"> <%= name %> </p>
-    <div class="videoCardContainer"> 
-      
-      <% if(videoCardInfos == false){ %>
-        <p class="text mediumText textCentered"> Não foi possível encontrar os vídeos desse canal </p>
-      <% } else { %>
-        <% for(let i=0; i<videoCardInfos.length; i++) {%>
-            <%- include('./partials/videocard', videoCardInfos[i]) %>
-        <% } %>
-      <% } %>
-    </div>
-    <p class= "textCentered highText"> Esse foi o canal de <span style="color: <%= color %>"> <%= name %> </span> </p>
-  </body>
+      <main class="main">
+
+        <p class="textCentered highText" style="color: <%= color %>">
+          <%= name %>
+        </p>
+        <div class="videoSlider hcenter">
+
+          <% if(videoCardInfos==false){ %>
+            <p class="text mediumText textCentered"> Não foi possível encontrar os vídeos desse canal </p>
+            <% } else { %>
+              <% for(let i=0; i<videoCardInfos.length; i++) {%>
+                <%- include('./partials/videocard', videoCardInfos[i]) %>
+                  <% } %>
+                    <% } %>
+        </div>
+        <p class="textCentered highText"> Esse foi o canal de <span style="color: <%= color %>">
+            <%= name %>
+          </span> </p>
+
+
+      </main>
+
+
+
+
+  </div>
+
+</body>
+
 </html>

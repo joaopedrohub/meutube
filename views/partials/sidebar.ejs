@@ -1,11 +1,24 @@
-<div class="sidebar verticalFlex">
+<aside>
+    <div class="sidebar verticalFlex">
+        <h1 class="textCentered"> Meutube </h1>
+        <ul>
+            <li> <%- include('./sidebarItem', {title: "Home" , image: "/icons/home.png" , alt: "Casa" ,
+                    link:"http://localhost:3000/"}) %>
+            </li>
+            <li> <%- include('./sidebarItem', {title: "Publicar" , image: "/icons/video.png" , alt: "Vídeo" ,
+                    link:"http://localhost:3000/studio/publish"}) %>
+            </li>
+            <li> <%- include('./sidebarItem', {title: "Meu canal" , image: "/icons/person.png" , alt: "Canal" ,
+                    link:"http://localhost:3000/channel/"}) %>
+            </li>
 
-    <%- include('./sidebarItem', {title: "Home" , image: "" , alt: "Casa" , link:"http://localhost:3000/"}) %>
-        <%- include('./sidebarItem', {title: "Publicar" , image: "" , alt: "Vídeo" ,
-            link:"http://localhost:3000/studio/publish"}) %>
-            <%- include('./sidebarItem', {title: "Meu canal" , image: "" , alt: "Canal" , link:"http://localhost:3000/channel/"}) %>
 
-</div>
+
+        </ul>
+
+    </div>
+</aside>
+
 
 <script>
 

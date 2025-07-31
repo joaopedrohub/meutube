@@ -4,22 +4,21 @@
 <head>
     <meta charset="utf-8">
     <title>Publicar um vídeo</title>
-    <link rel="icon" href="/favicon.ico">
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/inputs.css' />
     <link rel='stylesheet' href='/stylesheets/texting.css' />
     <link rel='stylesheet' href='/stylesheets/videoing.css' />
-    <link rel="stylesheet" href="/stylesheets/common.css" />
     <link rel="stylesheet" href="/stylesheets/containers.css" />
     <link rel="stylesheet" href="/stylesheets/positioning.css" />
     <link rel="stylesheet" href="/stylesheets/sizing.css" />
+    <link rel='stylesheet' href='/stylesheets/imaging.css'>
 
     <script src="/javascripts/publishingVideo.js"> </script>
     <style>
         html,
         body {
             font-family: Verdana;
-            background-color: #adff2f;
+            background-color: #7fff00;
         }
     </style>
 </head>
@@ -27,53 +26,68 @@
 
 <body class="staticBody">
 
-    <div class="mainGreyRectangle vhcenter">
-        <div id="workshop" style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
-            <p class="highishText" style="padding:0;margin: 0;"> Publique seu vídeo </p>
-            <textarea id="title" placeholder="Título do vídeo" class="inputBox"></textarea>
-            <textarea id="description" placeholder="Descrição do vídeo" class="inputBox"></textarea>
-            
-            <div>
-                <p class="lowText"> Selecione temas que representem o vídeo (máx: 3)</p>
-                <div id="tagBox" class="inputBox horizontalFlex halfWidth smallGap">
-                    
-                    <% tags.forEach(function(tag) { %>
+    <div class="horizontalFlex">
+        <%- include('./partials/sidebar') %>
 
-                        <button class="disabledTagButton textCentered zeroHorizontalMargin" data-color="<%= tag.color %>"><%= tag.name %></button>
-            
-                    <% }); %>
+            <main class="main-center">
+                <div class="mainGreyRectangle hcenter">
+                    <div id="workshop"
+                        style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
+                        <p class="highishText"> Publique seu vídeo </p>
+                        <textarea id="title" placeholder="Título do vídeo" class="inputBox"></textarea>
+                        <textarea id="description" placeholder="Descrição do vídeo" class="inputBox"></textarea>
+
+                        <div>
+                            <p class="lowText"> Selecione temas que representem o vídeo (máx: 3)</p>
+                            <div id="tagBox" class="inputBox horizontalFlex halfWidth smallGap">
+
+                                <% tags.forEach(function(tag) { %>
+
+                                    <button class="disabledTagButton textCentered zeroHorizontalMargin"
+                                        data-color="<%= tag.color %>">
+                                        <%= tag.name %>
+                                    </button>
+
+                                    <% }); %>
+
+                            </div>
+                        </div>
+
+                        <div>
+
+                            <p class="lowText"> Selecione uma thumbnail </p>
+                            <input id="thumbnailFile" type="file" accept="image/*" alt="Selecione a Thumbnail"
+                                class="inputBox">
+                            <p class="lowText"> Selecione um vídeo </p>
+                            <input id="videoFile" class="inputBox" type="file" accept="video/mp4" placeholder="Vídeo">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div style="position: absolute; right: 10%; top:10%;width: 20%;">
+                        <button class="invisibleFill">
+                            <img src="/defaultThumbnail.png" class="thumbnail">
+                            <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channel.color %>">
+                                    <%= channel.name %>
+                                </span>: <span id="videoTitle"> </span></p>
+                            <p class="lowText"> 0 Visualizações </p>
+                        </button>
+
+                    </div>
+
+                    <button id="publishButton" class="disabledMyButton hcenter" style="position:absolute;right:10%;bottom: 10%;">
+                        Publicar
+                    </button>
 
                 </div>
-            </div>
 
-            <div>
-
-                <p class="lowText"> Selecione uma thumbnail </p>
-                <input id="thumbnailFile" type="file" accept="image/*" alt="Selecione a Thumbnail" class="inputBox">
-                <p class="lowText"> Selecione um vídeo </p>
-                <input id="videoFile" class="inputBox" type="file" accept="video/mp4" placeholder="Vídeo">
-
-
-            </div>
-
-        </div>
-
-
-
-        <div style="position:absolute; left:63.5%;top:5%;aspect-ratio:16/9;width:25%">
-            <button class="invisibleFill">
-                <img class="thumbnail">
-                <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channel.color %>"> <%= channel.name %> </span>: <span id="videoTitle"> título do vídeo </span></p>
-                <p class="lowText"> 0 Visualizações </p>
-            </button>
-
-        </div>
-
-        <button id="publishButton" class="disabledMyButton" style="position:absolute;bottom:3%;right:3%"> Publicar </button>
-
+                <%- include('./partials/helper', {title: "O servidor diz:" }) %>
+            </main>
     </div>
 
-    <%- include('./partials/helper', {title: "O servidor diz:"}) %>
 </body>
 
 </html>

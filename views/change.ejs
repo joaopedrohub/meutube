@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/stylesheets/containers.css" />
     <link rel="stylesheet" href="/stylesheets/positioning.css" />
     <link rel="stylesheet" href="/stylesheets/sizing.css" />
+    <link rel="stylesheet" href="/stylesheets/imaging.css" />
     <script src="/javascripts/changingVideo.js"> </script>
     <style>
         html,
@@ -25,46 +26,58 @@
 
 <body class="staticBody">
 
-    <div class="mainGreyRectangle vhcenter">
-        <div id="workshop"
-            style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
-            <p class="highishText" class="zeroPadding"> Edite seu vídeo </p>
-            <textarea id="title" placeholder="Título do vídeo" class="inputBox"><%= video.title %></textarea>
-            <textarea id="description" placeholder="Descrição do vídeo"
-                class="inputBox"><%= video.description %></textarea>
+    <div class="horizontalFlex">
+        <%- include('./partials/sidebar') %>
 
-            <div>
+            <main class="main-center">
+                <div class="mainGreyRectangle hcenter">
+                    <div id="workshop"
+                        style="margin-right:auto; width:50%;padding:20px;display:flex;flex-direction: column;row-gap: 3vh;max-height: 100%;overflow-y: hidden;">
+                        <p class="highishText"> Edite seu vídeo </p>
+                        <textarea id="title" placeholder="Título do vídeo"
+                            class="inputBox"><%= video.title %></textarea>
+                        <textarea id="description" placeholder="Descrição do vídeo"
+                            class="inputBox"><%= video.description %></textarea>
 
-                <p class="lowText"> Selecione uma nova thumbnail </p>
-                <input id="thumbnailFile" type="file" accept="image/*" alt="Selecione a nova Thumbnail"
-                    class="inputBox">
+                        <div>
 
-            </div>
+                            <p class="lowText"> Selecione uma nova thumbnail </p>
+                            <input id="thumbnailFile" type="file" accept="image/*" alt="Selecione a nova Thumbnail"
+                                class="inputBox">
 
-            
+                        </div>
 
-        </div>
+                    </div>
 
-        <div style="position:absolute; left:63.5%;top:5%;aspect-ratio:16/9;width:25%">
-            <button class="invisibleFill">
-                <img class="thumbnail" src="<%= thumbnailPath %>">
-                <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channel.color %>">
-                        <%= channel.name %>
-                    </span>: <span id="videoTitle">
-                        <%= video.title %>
-                    </span></p>
-                <p class="lowText">
-                    <%= video.views %> Visualizações
-                </p>
-            </button>
-        </div>
+                    <button id="deleteButton" class="myButton"
+                        style="position: absolute;left: 20%;bottom: 10%;background-color: darkred;"> Excluir vídeo
+                    </button>
+                    <button id="confirmButton" class="myButton" style="position:absolute;right:10%;bottom: 10%;">
+                        Confirmar
+                    </button>
 
-        <button id="confirmButton"class="myButton" style="position:absolute;bottom:3%;right:3%"> Confirmar </button>
-        <button id="deleteButton" class="inputBox defaultButton" style="position:absolute;bottom:3%;left:3%"> Excluir vídeo </button>
+                    <div style="position: absolute; right: 10%; top:10%;width: 20%;">
+                        <button class="invisibleFill">
+                            <img class="thumbnail" src="<%= thumbnailPath %>">
+                            <p class="videoCardTitle"> <span class="channelTitle" style="color: <%= channel.color %>">
+                                    <%= channel.name %>
+                                </span>: <span id="videoTitle">
+                                    <%= video.title %>
+                                </span></p>
+                            <p class="lowText">
+                                <%= video.views %> Visualizações
+                            </p>
+                        </button>
+                    </div>
 
-        
+                </div>
+                <%- include('./partials/helper', {title: "O servidor diz:" })%>
+            </main>
+
     </div>
-    <%- include('./partials/helper', {title: "O servidor diz:"})%>
+
+
+
 </body>
 
 </html>

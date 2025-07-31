@@ -60,10 +60,12 @@
       <div class="inputBox halfWidth hcenter horizontalFlex">
         <% tags.forEach(function(tag) { %>
 
-          <button class="enabledTagButton" style="background-color: <%= tag.color %>"> <%= tag.name %> </button>
+          <button class="enabledTagButton" style="background-color: <%= tag.color %>">
+            <%=tag.name%>
+          </button>
 
-      <% }); %>
-        
+          <% }); %>
+
       </div>
 
       <p class="mediumText textPadding textCentered" style="margin-top: 10%;"> Descrição do vídeo: </p>
@@ -79,8 +81,9 @@
 
   </div>
 
-  <button class="returnButton textCentered"> Ver mais vídeos </button>
 
+  <button class="returnButton textCentered"> Ver mais vídeos </button>
+  <script>  </script>
 </body>
 
 </html>

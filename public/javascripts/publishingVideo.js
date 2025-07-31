@@ -7,8 +7,9 @@ function toggleTagButton(button) {
         if (activeTags.length == 3) {
             return
         }
-
-        const tag = button.innerHTML
+    
+        let tag = button.innerHTML
+        tag = tag.replace(/[^\p{L}\p{N}]/gu, '');
         activeTags.push(tag)
 
         button.classList.replace("disabledTagButton", "enabledTagButton")
@@ -54,9 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (titleInput.value.length > 0 && titleInput.value.length <= 48 && thumbnailFileInput.files[0] && videoFileInput.files[0]) {
             publishButton.classList.remove("disabledMyButton")
             publishButton.classList.add("myButton")
+            publishButton.disabled = false
         } else {
             publishButton.classList.remove("myButton")
             publishButton.classList.add("disabledMyButton")
+            publishButton.disabled = true
         }
     }
 
@@ -67,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
             helperButton.disabled = false
         }
         if (redirect) {
-            helperButton.addEventListener("click", function() {
+            helperButton.addEventListener("click", function () {
                 window.location.href = "http://localhost:3000/channel/"
             })
         }
@@ -84,9 +87,15 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePublishButton()
     })
 
-    videoFileInput.addEventListener("change", function() {
+    videoFileInput.addEventListener("change", function () {
         const file = videoFileInput.files[0]
         updatePublishButton()
+    })
+
+    helperButton.addEventListener("click", function () {
+        helper.classList.add("invisible")
+        helperButton.classList.replace("myButton", "disabledMyButton")
+        helperButton.disabled = true
     })
 
     let allTagButtons = document.querySelector("#tagBox").children
@@ -100,11 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     updatePublishButton()
-    if (thumbnailFileInput.files[0]) {setThumbnailPreview(thumbnailFileInput.files[0])}
+    if (thumbnailFileInput.files[0]) { setThumbnailPreview(thumbnailFileInput.files[0]) }
 
     publishButton.addEventListener("click", function () {
         const title = titleInput.value
         helper.classList.remove("invisible")
+        insertLine("-----------------")
 
         if (!(title.length > 1 && title.length < 48)) {
             return
@@ -141,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         }
-
+        
         xhr.send(formData)
     })
 

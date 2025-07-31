@@ -1,0 +1,9 @@
+.icon {
+    aspect-ratio: 1/1;
+    max-width: 32px;
+    height: 32px;
+    width: 32px;
+    display: block;
+    object-fit: contain;
+    flex-shrink: 0;
+}

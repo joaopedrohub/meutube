@@ -11,8 +11,7 @@ const prisma = require('../prisma/client')
 const validator = new Validator()
 
 const imageFileTypeWhitelist = [
-
-    "image/png",
+    
     "image/jpeg",
     "image/jpg",
     "image/webp"
@@ -65,10 +64,22 @@ const publishMulterMiddleware = upload.fields([
 
 const changeMulterMiddleware = upload.single("thumbnail")
 
-router.post('/publish', publishMulterMiddleware, authTokenMiddleware, async function (req, res) {
-    const body = { ...req.body } // isso é necessário para que o objeto ganhe os métodos de um object (hasOwnProperty, especificamente)
+router.post('/publish', authTokenMiddleware, async function (req, res) {
+
+    publishMulterMiddleware(req,res,async function(error) {
+        if (error instanceof multer.MulterError) {
+            return res.status(400).json({reason: "Um dos arquivos que você enviou excede o limite de 50MB :|"})
+        } else if (error) {
+            return res.status(400).json({reason: "Não consegui processar um dos arquivos que você enviou... gulp... :c"})
+        }
+
+        const body = { ...req.body } // isso é necessário para que o objeto ganhe os métodos de um object (hasOwnProperty, especificamente)
     const requiredInfo = ['title', 'description', 'tags']
     const channel = req.channel
+
+    if (!req.files.video || !req.files.thumbnail) {
+        return res.status(400).json({ reason: "Você esqueceu de enviar um arquivo ou enviou um arquivo com formato inválido. Você pode usar jpg ou webp para thumbnails e mp4 para vídeos" })
+    }
 
     const hasNecessaryInfo = requiredInfo.every((property) => body.hasOwnProperty(property))
     if (hasNecessaryInfo && req.files.video[0] && req.files.thumbnail[0]) {
@@ -95,6 +106,7 @@ router.post('/publish', publishMulterMiddleware, authTokenMiddleware, async func
 
             const tags = JSON.parse(body.tags)
             let newVideo
+            console.log(tags.map((name => ({name}))))
             try {
                 newVideo = await prisma.video.create({
                     data: {
@@ -116,9 +128,7 @@ router.post('/publish', publishMulterMiddleware, authTokenMiddleware, async func
                 console.error(error.message)
                 res.status(500).json({ reason: "Desculpa. Não consegui criar o vídeo. Talvez você tenha enviado uma tag que não existe? :(" })
             }
-
-
-            res.sendStatus(201)
+            return res.sendStatus(201)
 
         } else {
             res.status(400).json({ reason: "Título ou descrição não estão dentro do limite de 1 a 48 caracteres e 0 a 1024 caracteres respectivamente." })
@@ -127,6 +137,7 @@ router.post('/publish', publishMulterMiddleware, authTokenMiddleware, async func
     } else {
         res.status(400).json({ reason: "Faltou você enviar alguma coisa... :(" })
     }
+    })
 
 })
 

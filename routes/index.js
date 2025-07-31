@@ -43,7 +43,7 @@ router.get('/tag/:tag', async function (req, res, next) {
 
   let tag
   try {
-    tag = prisma.tag.findFirst({ where: { name: tagName } })
+    tag = await prisma.tag.findFirst({ where: { name: tagName } })
   } catch (error) {
     console.log(error)
     res.render("index", { videoCardInfos: [] })
@@ -70,7 +70,7 @@ router.get('/tag/:tag', async function (req, res, next) {
 
     let channelsCache = new Map()
 
-    for (var i = 0; i < videos.length; i++) {
+    for (let i = 0; i < videos.length; i++) {
       const video = videos[i]
       const channelId = video.channelId
 
