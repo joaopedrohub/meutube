@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const likeButton = document.querySelector("#like")
     const shareButton = document.querySelector("#please")
     const dislikeButton = document.querySelector("#dislike")
+    const returnButton = document.querySelector(".returnButton")
 
     function choose(button, confirm) {
         if (confirm) {
@@ -41,6 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
         tag.addEventListener("click", function() {
             window.location.href = "http://localhost:3000/tag/" + tag.innerText
         })
-    }
+    }   
 
+    returnButton.addEventListener("click", function() {
+        window.location.href = "http://localhost:3000/"
+    })
 })
