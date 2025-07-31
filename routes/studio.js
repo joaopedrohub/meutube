@@ -7,6 +7,7 @@ const { authTokenMiddleware, isLoggedMiddleware } = require("../models/Authentic
 const jwt = require("jsonwebtoken")
 const fs = require("fs")
 const prisma = require('../prisma/client')
+const uploadToCloudinary = require('../models/UploadToCloudinary')
 
 const validator = new Validator()
 
@@ -27,18 +28,7 @@ const videoFileTypeWhitelist = [
 const allTypesWhiteList = imageFileTypeWhitelist.concat(videoFileTypeWhitelist)
 
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: function (req, file, cb) {
-            if (imageFileTypeWhitelist.find((mimetype) => mimetype == file.mimetype)) {
-
-                cb(null, "uploads/thumbnails")
-            } else if (videoFileTypeWhitelist.find((mimetype) => mimetype == file.mimetype)) {
-                cb(null, "uploads/videos")
-            } else {
-                cb(new Error("Formato de arquivo inválido"))
-            }
-        },
-    }),
+    storage: multer.memoryStorage(),
     fileFilter: (req, file, cb) => {
         if (allTypesWhiteList.find((mimetype) => mimetype == file.mimetype)) {
             cb(null, true)
@@ -93,27 +83,23 @@ router.post('/publish', authTokenMiddleware, async function (req, res) {
         if (validator.isStringLengthInRange(title, 1, 48) && validator.isStringLengthInRange(description, 0, 1024)) {
 
             const videoFile = req.files.video[0]
-            const videoFilePath = "/uploads/videos/" + videoFile.filename
-
             const thumbnailFile = req.files.thumbnail[0]
-            let thumbnailFilePath
-            if (thumbnailFile) {
-                thumbnailFilePath = "/uploads/thumbnails/" + thumbnailFile.filename
-            } else {
-                thumbnailFilePath = "/defaultThumbnail"
-            }
 
 
             const tags = JSON.parse(body.tags)
             let newVideo
-            console.log(tags.map((name => ({name}))))
+            
             try {
+
+                const uploadedVideo = await uploadToCloudinary(videoFile.buffer, 'videos', 'video')
+                const uploadedThumbnail = await uploadToCloudinary(thumbnailFile.buffer, "thumbnails", "image")
+
                 newVideo = await prisma.video.create({
                     data: {
                         title: title,
                         description: description,
-                        videoPath: videoFilePath,
-                        thumbnailPath: thumbnailFilePath,
+                        videoPath: uploadedVideo.secure_url,
+                        thumbnailPath: uploadedThumbnail.secure_url,
                         channelId: channel.id,
 
                         tags: {
@@ -126,12 +112,12 @@ router.post('/publish', authTokenMiddleware, async function (req, res) {
                 })
             } catch (error) {
                 console.error(error.message)
-                res.status(500).json({ reason: "Desculpa. Não consegui criar o vídeo. Talvez você tenha enviado uma tag que não existe? :(" })
+                return res.status(500).json({ reason: "Desculpa. Não consegui criar o vídeo. Talvez você tenha enviado uma tag que não existe? :(" })
             }
             return res.sendStatus(201)
 
         } else {
-            res.status(400).json({ reason: "Título ou descrição não estão dentro do limite de 1 a 48 caracteres e 0 a 1024 caracteres respectivamente." })
+           return res.status(400).json({ reason: "Título ou descrição não estão dentro do limite de 1 a 48 caracteres e 0 a 1024 caracteres respectivamente." })
         }
 
     } else {
