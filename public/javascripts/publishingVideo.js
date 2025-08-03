@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     helperButton.addEventListener("click", function () {
-        helper.classList.add("invisible")
+        helper.classList.add("trueInvisible")
         helperButton.classList.replace("myButton", "disabledMyButton")
         helperButton.disabled = true
     })
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     publishButton.addEventListener("click", function () {
         const title = titleInput.value
-        helper.classList.remove("invisible")
+        helper.classList.remove("trueInvisible")
         insertLine("-----------------")
 
         if (!(title.length > 1 && title.length < 48)) {

@@ -6,7 +6,7 @@ class VideoCardInfo {
 
         this.videoId = video.id
         this.title = video.title
-        this.thumbnail = video.thumbnailPath
+        this.thumbnail = "/uploads/thumbnails/" + video.thumbnailFileName
         this.channelName = channel.name
         this.channelColor = channel.color
         this.views = video.views

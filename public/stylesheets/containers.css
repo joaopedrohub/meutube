@@ -37,7 +37,6 @@
 
 .sidebar {
 
-
     width: 220px;
     background-color: #131313;
     height: 100vh;
@@ -61,6 +60,11 @@
 }
 
 .invisible {
+    background-color: transparent;
+    border-style: none;
+}
+
+.trueInvisible {
     display: none;
 }
 
@@ -87,18 +91,15 @@
     background-color: rgb(100, 100, 100, .6);
 }
 
-
-
 .main {
     flex: 1
 }
 
-.main-center {
+.main-center { 
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
-
 
 }
 
@@ -116,4 +117,16 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.videoCardContainer {
+    aspect-ratio:3/2;
+    width:30%;
+    border-radius: 8px;
+    background-color: #11111100;
+}
+
+.videoCardContainer:hover {
+    cursor: pointer;
+    background-color: #ffffff38;
 }

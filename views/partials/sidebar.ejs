@@ -5,7 +5,10 @@
             <li> <%- include('./sidebarItem', {title: "Home" , image: "/icons/home.png" , alt: "Casa" ,
                     link:"http://localhost:3000/"}) %>
             </li>
-            <li> <%- include('./sidebarItem', {title: "Publicar" , image: "/icons/video.png" , alt: "Vídeo" ,
+            <li> <%- include('./sidebarItem', {title: "Estúdio" , image: "/icons/video.png" , alt: "Estúdio" ,
+                    link:"http://localhost:3000/studio"}) %>
+            </li>
+            <li> <%- include('./sidebarItem', {title: "Publicar" , image: "/icons/video.png" , alt: "Estúdio" ,
                     link:"http://localhost:3000/studio/publish"}) %>
             </li>
             <li> <%- include('./sidebarItem', {title: "Meu canal" , image: "/icons/person.png" , alt: "Canal" ,
@@ -18,17 +21,3 @@
 
     </div>
 </aside>
-
-
-<script>
-
-    const sidebarButtons = document.querySelectorAll("#sidebarButton")
-
-    sidebarButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-            window.location.href = button.dataset.link
-
-        })
-    })
-
-</script>

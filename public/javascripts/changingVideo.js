@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     confirmButton.addEventListener("click", function () {
         const title = titleInput.value
-        helper.classList.remove("invisible")
+        helper.classList.remove("trueInvisible")
 
         if (!(title.length > 1 && title.length < 48)) {
             return
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     deleteButton.addEventListener("click", function () {
-        helper.classList.remove("invisible")
+        helper.classList.remove("trueInvisible")
         const xhr = new XMLHttpRequest()
 
         const url = new URL(window.location.href)
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     helperButton.addEventListener("click", function () {
-        helper.classList.add("invisible")
+        helper.classList.add("trueInvisible")
         helperButton.classList.replace("myButton", "disabledMyButton")
         helperButton.disabled = true
     })

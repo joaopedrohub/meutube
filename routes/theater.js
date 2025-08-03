@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 const jwt = require('jsonwebtoken');
-const { isLoggedMiddleware } = require('../models/Authenticator');
+const isLoggedMiddleware = require("../middlewares/authentication/isLoggedMiddleware")
 
 router.get('/:videoId', isLoggedMiddleware, async function (req, res, next) {
   const prisma = require('../prisma/client')
@@ -13,7 +13,7 @@ router.get('/:videoId', isLoggedMiddleware, async function (req, res, next) {
   if (video) {
     const channelId = video.channelId
     const channel = await prisma.channel.findUnique({ where: { id: channelId } })
-    const videoURL = video.videoPath
+    const videoURL = "/uploads/videos/" + video.videoFileName
 
     if (channel) {
       

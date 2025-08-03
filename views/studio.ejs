@@ -2,34 +2,44 @@
 <html>
 
 <head>
-  <title>Home</title>
+  <title>
+    Seu estúdio
+  </title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/texting.css' />
   <link rel='stylesheet' href='/stylesheets/videoing.css' />
   <link rel='stylesheet' href='/stylesheets/containers.css'>
   <link rel='stylesheet' href='/stylesheets/positioning.css'>
   <link rel='stylesheet' href='/stylesheets/imaging.css'>
+  <link rel='stylesheet' href='/stylesheets/inputs.css'>
   <script src="/javascripts/videoCardActivator.js">  </script>
 </head>
 
 <body class="staticBody">
   <div class="horizontalFlex">
+
     <%- include('./partials/sidebar') %>
       <main class="main">
-        <p class="textCentered highText">Bem vindo</p>
-        <p class="textCentered mediumText"> Pegue uma pipoca e uma bebida para assistir aos vídeos. </p>
 
+        <p class="textCentered highText">
+          Seu estúdio
+        </p>
         <div class="videoSlider hcenter">
+
           <% for(var i=0; i<videoCardInfos.length; i++) {%>
+            <a href="/studio/change/<%= videoCardInfos[i].videoId %>">
+              <%- include('./partials/videocard', videoCardInfos[i]) %>
+            </a>
 
-            <%- include('./partials/videocard', videoCardInfos[i]) %>
 
-              <% } %>
+            <% } %>
 
         </div>
-        <p class="textCentered highText"> Você chegou no final :( </p>
+
       </main>
+
   </div>
+
 </body>
 
 </html>

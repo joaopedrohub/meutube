@@ -1,11 +1,12 @@
 <div class="sidebarItem horizontalFlex">
+    <a href="<%= link %>">
+        <button id="sidebarButton" class="invisibleFill horizontalFlex" title="<%= title %>"
+            style="align-items: center;column-gap: 30px">
+            <img src="<%= image %>" alt="<%= alt %>" class="icon">
+            <p class="text">
+                <%= title %>
+            </p>
 
-    <button id = "sidebarButton" class="invisibleFill horizontalFlex" title="<%= title %>" style="align-items: center;column-gap: 30px" data-link="<%= link %>">
-        <img src="<%= image %>" alt="<%= alt %>" class="icon" >
-        <p class="text">
-            <%= title %>
-        </p>
-
-    </button>
-
+        </button>
+    </a>
 </div>

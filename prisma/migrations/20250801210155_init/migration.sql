@@ -5,6 +5,7 @@ CREATE TABLE "Channel" (
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "color" TEXT NOT NULL,
+    "admin" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
 );
@@ -16,12 +17,12 @@ CREATE TABLE "Video" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "channelId" INTEGER NOT NULL,
-    "thumbnailPath" TEXT NOT NULL,
-    "videoPath" TEXT NOT NULL,
-    "views" INTEGER NOT NULL,
-    "likes" INTEGER NOT NULL,
-    "dislikes" INTEGER NOT NULL,
-    "shares" INTEGER NOT NULL,
+    "thumbnailFileName" TEXT NOT NULL,
+    "videoFileName" TEXT NOT NULL,
+    "views" INTEGER NOT NULL DEFAULT 0,
+    "likes" INTEGER NOT NULL DEFAULT 0,
+    "dislikes" INTEGER NOT NULL DEFAULT 0,
+    "shares" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Video_pkey" PRIMARY KEY ("id")
 );
