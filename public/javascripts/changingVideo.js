@@ -1,3 +1,4 @@
+import uploadToCloudinary from "./uploadToCloudinary.js"
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -51,43 +52,73 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateConfirmButton()
 
-    confirmButton.addEventListener("click", function () {
-        const title = titleInput.value
+    confirmButton.addEventListener("click", async function () {
         helper.classList.remove("trueInvisible")
-
-        if (!(title.length > 1 && title.length < 48)) {
-            return
-        }
-
-
-        const formData = new FormData()
-
-        formData.append("title", title)
-        formData.append("description", descriptionInput.value)
-        formData.append("thumbnail", thumbnailFileInput.files[0])
-
-        const xhr = new XMLHttpRequest()
 
         const url = new URL(window.location.href)
         const nodes = url.pathname.split('/')
         const videoId = nodes[nodes.length - 1]
 
-        xhr.open("PUT", "/studio/change/" + videoId)
+        let response
 
-        xhr.withCredentials = true
-        xhr.responseType = 'json'
+        response = await fetch("/studio/change/" + videoId, {
+            method: "PUT",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                title: titleInput.value,
+                description: descriptionInput.value,
+                thumbnail: thumbnailFileInput.files[0] ? true : false // true se quer mudar, false se não quer mudar
+            })
+        })
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    insertLine("Seu vídeo foi editado com sucesso! :D", true, true)
-                } else {
-                    insertLine(xhr.response.reason, true)
-                }
+        const status = response.status
+        let data
+
+        if (status == 200) {
+            insertLine("Seu vídeo foi editado com sucesso!", true, true)
+        } else if (status == 202) {
+            insertLine("Seu título e descrição estão nos conformes, agora só falta a gente receber a nova thumbnail :)")
+
+            data = await response.json()
+            const uploadData = data.uploadData
+            let thumbnailUpload
+
+            try {
+                thumbnailUpload = await uploadToCloudinary(thumbnailFileInput.files[0], {
+                    ...uploadData.thumbnail,
+                    api_key: uploadData.api_key,
+                    cloud_name: uploadData.cloud_name,
+                    timestamp: uploadData.timestamp
+
+
+                }, "image", (percent) => { insertLine("Progresso da thumbnail: " + percent + "%")})
+            } catch (error) {
+                console.error(error)
+                throw error
             }
+
+            response = await fetch(`/studio/change/${videoId}/confirm`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title: titleInput.value,
+                    description: descriptionInput.value,
+                    thumbnailPublicId: thumbnailUpload.public_id
+                })
+            })
+
+            data = await response.json()
+
+            if (response.status == 200) {
+                insertLine("Seu vídeo foi editado com sucesso!", true, true)
+            } else {
+                insertLine(data.reason, true)
+            }
+
         }
 
-        xhr.send(formData)
     })
 
     deleteButton.addEventListener("click", function () {

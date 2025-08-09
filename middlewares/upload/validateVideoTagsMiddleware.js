@@ -4,7 +4,8 @@ const cleanupUploadedFiles = require("../../utils/cleanupUploadedFiles")
 
 async function validateMiddlewareTags(req, res, next) {
     const prisma = require("../../prisma/client")
-    const tags = JSON.parse(req.body?.tags) //tags que o usuário quer no vídeo
+    const tags = req.body?.tags
+    
 
     if (!tags) {
         await cleanupUploadedFiles(req)

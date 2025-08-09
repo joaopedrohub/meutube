@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
     }
 })
 
-const publishVideoMiddleware = multer({
+const multerAcceptPublishFilesMiddleware = multer({
     storage: storage,
     fileFilter: fileTypeFilter,
     limits: {
@@ -65,7 +65,7 @@ const validateFileSizesMiddleware = (req, res, next) => {
 }
 
 module.exports = {
-    publishVideoMiddleware,
+    multerAcceptPublishFilesMiddleware,
     validateFileSizesMiddleware
     
 }

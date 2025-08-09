@@ -13,7 +13,7 @@ router.get('/:videoId', isLoggedMiddleware, async function (req, res, next) {
   if (video) {
     const channelId = video.channelId
     const channel = await prisma.channel.findUnique({ where: { id: channelId } })
-    const videoURL = "/uploads/videos/" + video.videoFileName
+    const videoURL = video.videoFileName
 
     if (channel) {
       

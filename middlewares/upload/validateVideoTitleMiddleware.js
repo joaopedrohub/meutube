@@ -29,7 +29,6 @@ async function validateVideoTitleMiddleware(req, res, next) {
         return res.status(400).json({reason: "Seu título tem um caractere que não pode: " + "'" + match + "'. '^'"})
     }
 
-    console.log("next do title")
     return next()
 
 }

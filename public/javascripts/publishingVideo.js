@@ -1,3 +1,5 @@
+import uploadToCloudinary from "./uploadToCloudinary.js"
+
 function toggleTagButton(button) {
 
     const on = !activeTags.find((tag) => tag == button.innerHTML)
@@ -7,7 +9,7 @@ function toggleTagButton(button) {
         if (activeTags.length == 3) {
             return
         }
-    
+
         let tag = button.innerHTML
         tag = tag.replace(/[^\p{L}\p{N}]/gu, '');
         activeTags.push(tag)
@@ -27,8 +29,6 @@ function toggleTagButton(button) {
 }
 
 let activeTags = []
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -111,48 +111,104 @@ document.addEventListener("DOMContentLoaded", function () {
     updatePublishButton()
     if (thumbnailFileInput.files[0]) { setThumbnailPreview(thumbnailFileInput.files[0]) }
 
-    publishButton.addEventListener("click", function () {
+    publishButton.addEventListener("click", async function () {
         const title = titleInput.value
         helper.classList.remove("trueInvisible")
         insertLine("-----------------")
 
-        if (!(title.length > 1 && title.length < 48)) {
-            return
-        }
+        const response = await fetch("/studio/publish", {
+            method: 'POST',
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                title: title,
+                description: descriptionInput.value,
+                tags: activeTags
+            })
+        })
+            .then(async response => {
+                const status = response.status
+                let data
 
-        const formData = new FormData()
-
-        formData.append("title", title)
-        formData.append("description", descriptionInput.value)
-        formData.append("tags", JSON.stringify(activeTags))
-        formData.append("thumbnail", thumbnailFileInput.files[0])
-        formData.append("video", videoFileInput.files[0])
-
-        const xhr = new XMLHttpRequest()
-
-        xhr.open("POST", "/studio/publish")
-
-        xhr.withCredentials = true
-        xhr.responseType = 'json'
-
-        xhr.upload.onprogress = function (event) {
-            if (event.lengthComputable) {
-                const percent = Math.round((event.loaded / event.total) * 100)
-                insertLine("Estou recebendo seu vídeo... " + percent + "%")
-            }
-        }
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-                if (xhr.status == 201) {
-                    insertLine("Recebi o seu vídeo! Irei publicar ele ;)", true, true)
-                } else {
-                    insertLine(xhr.response.reason, true)
+                try {
+                    data = await response.json()
+                } catch (error) {
+                    console.error(error)
+                    data = {}
                 }
-            }
-        }
-        
-        xhr.send(formData)
+
+                return { status, data }
+            })
+            .then(async result => {
+
+                if (result.status == 200) {
+                    insertLine("Título, descrição e tags nos conformes. Agora, seu vídeo está sendo enviado para nosso armazém...")
+
+                    const videoFile = videoFileInput.files[0]
+                    const thumbnailFile = thumbnailFileInput.files[0]
+                    const uploadData = result.data.uploadData
+
+                    const videoUpload = uploadToCloudinary(videoFile, {
+                        ...uploadData.video,
+                        api_key: uploadData.api_key,
+                        cloud_name: uploadData.cloud_name,
+                        timestamp: uploadData.timestamp
+                    }, "video", (percent) => { insertLine("Progresso de envio do vídeo: " + percent + "%")})
+
+                    const thumbnailUpload = uploadToCloudinary(thumbnailFile, {
+                        ...uploadData.thumbnail,
+                        api_key: uploadData.api_key,
+                        cloud_name: uploadData.cloud_name,
+                        timestamp: uploadData.timestamp
+                    }, "image", (percent) => { insertLine("Progresso do envio da thumbnail: " + percent + "%") })
+
+                    try {
+                        const [videoResult, thumbnailResult] = await Promise.all([videoUpload, thumbnailUpload])
+
+                        await fetch("/studio/publish/confirm", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                title: title,
+                                description: descriptionInput.value,
+                                tags: activeTags,
+                                videoPublicId: videoResult.public_id,
+                                thumbnailPublicId: thumbnailResult.public_id
+                            })
+                        })
+                            .then(async response => {
+                                const status = response.status
+                                let data
+
+                                try {
+                                    data = await response.json()
+                                } catch (error) {
+                                    console.error(error)
+                                    data = {}
+                                }
+
+                                return { status, data }
+                            })
+                            .then(async result => {
+                                if (result.status == 201) {
+                                    insertLine("Vídeo publicado. Deu tudo certo", true, true)
+                                } else {
+                                    insertLine(result.data.reason, true)
+                                }
+                            })
+
+                    }
+                    catch (error) {
+                        console.log(error)
+                        throw error
+                    }
+
+
+                } else {
+                    insertLine(result.data.reason)
+                }
+            })
     })
 
 })

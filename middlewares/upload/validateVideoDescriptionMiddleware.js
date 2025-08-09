@@ -24,7 +24,6 @@ async function validateVideoDescriptionMiddleware(req, res, next) {
         await cleanupUploadedFiles(req)
         return res.status(400).json({reason: "Sua descrição tem um caractere que não pode: " + "'" + match + "'. '^'"})
     }
-    console.log("next do description")
     return next()
 
 }
