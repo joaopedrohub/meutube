@@ -3,16 +3,20 @@
         <h1 class="textCentered"> Meutube </h1>
         <ul>
             <li> <%- include('./sidebarItem', {title: "Home" , image: "/icons/home.png" , alt: "Casa" ,
-                    link:"http://localhost:3000/"}) %>
+                    link:"/"}) %>
             </li>
-            <li> <%- include('./sidebarItem', {title: "Estúdio" , image: "/icons/video.png" , alt: "Estúdio" ,
-                    link:"http://localhost:3000/studio"}) %>
+            <li> <%- include('./sidebarItem', {title: "Estúdio" , image: "/icons/videos.png" , alt: "Estúdio" ,
+                    link:"/studio"}) %>
             </li>
-            <li> <%- include('./sidebarItem', {title: "Publicar" , image: "/icons/video.png" , alt: "Estúdio" ,
-                    link:"http://localhost:3000/studio/publish"}) %>
+            <li> <%- include('./sidebarItem', {title: "Publicar" , image: "/icons/video.png" , alt: "Publicar" ,
+                    link:"/studio/publish"}) %>
             </li>
             <li> <%- include('./sidebarItem', {title: "Meu canal" , image: "/icons/person.png" , alt: "Canal" ,
-                    link:"http://localhost:3000/channel/"}) %>
+                    link:"/channel/"}) %>
+            </li>
+
+            <li> <%- include('./sidebarItem', {title: "Configurações" , image: "/icons/gear.png" , alt: "Configurações" ,
+                    link:"/configurations"}) %>
             </li>
 
 

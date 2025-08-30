@@ -1,16 +1,14 @@
 import uploadToCloudinary from "./uploadToCloudinary.js"
 
 function toggleTagButton(button) {
-
-    const on = !activeTags.find((tag) => tag == button.innerHTML)
-
+    const on = !activeTags.find((tag) => tag == button.innerText)
     if (on) {
 
         if (activeTags.length == 3) {
             return
         }
 
-        let tag = button.innerHTML
+        let tag = button.innerText
         tag = tag.replace(/[^\p{L}\p{N}]/gu, '');
         activeTags.push(tag)
 
@@ -18,7 +16,8 @@ function toggleTagButton(button) {
         button.style.backgroundColor = button.dataset.color
 
     } else {
-        const tag = button.innerHTML
+        let tag = button.innerText
+        tag = tag.replace(/[^\p{L}\p{N}]/gu, '');
         const index = activeTags.findIndex((otherTag) => tag == otherTag)
         if (index > -1) {
             activeTags.splice(index, 1)

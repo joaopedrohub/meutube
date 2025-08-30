@@ -9,81 +9,59 @@
   <link rel='stylesheet' href='/stylesheets/inputs.css' />
   <link rel='stylesheet' href='/stylesheets/sizing.css' />
   <link rel='stylesheet' href='/stylesheets/positioning.css' />
+  <link rel='stylesheet' href='/stylesheets/imaging.css' />
+  <link rel='stylesheet' href='/stylesheets/containers.css' />
+
   <script src="/javascripts/stage.js">  </script>
 </head>
 
-<body>
+<body class="staticBody">
 
-  <div style="display: flex; flex-direction: row;justify-content: space-around;">
+  <div class="horizontalFlex">
+    <%- include('./partials/sidebar') %>
+      <main class="main">
+        <div class="top5pxPadding" style="display: flex; flex-direction: row;justify-content: space-around;">
 
-    <video class="video" src="<%= videoURL %>" controls> </video>
+          <video class="video" src="<%= videoURL %>" data-id="<%= video.id %>" controls> </video>
 
-    <div style="background-color: #444444; border-radius: 8px;width:25%">
-      <p class="highishText" ; style="padding-left: 10px;text-align: left;">
-        <%= video.title %>
-      </p>
-      <p class="mediumText textPadding"> Por: <span style="color:<%= channel.color %>">
-          <%= channel.name %>
-        </span> </p>
+          <div style="background-color: #444444; border-radius: 8px;width:25%">
+            <p class="highishText" ; style="padding-left: 10px;text-align: left;">
+              <%= video.title %>
+            </p>
+            <p class="mediumText textPadding"> Por: <span style="color:<%= channel.color %>">
+                <%= channel.name %>
+              </span> </p>
 
-      <p class="lowText textPadding">
-        <%= video.views %> visualizações
-      </p>
+            <p class="lowText textPadding">
+              <%= video.views %> visualizações
+            </p>
 
-      <div style="display: flex;flex-direction: row; justify-content: center;column-gap: 5%;">
+            <div class="inputBox halfWidth hcenter horizontalFlex">
+              <% tags.forEach(function(tag) { %>
 
-        <div>
-          <button class="reactionButtonOff" id="like" title="Eu gostei desse vídeo!">
-            <img alt="❤️">
-          </button>
-          <p class="textCentered mediumText"> 0 </p>
+                <button class="enabledTagButton" style="background-color: <%= tag.color %>">
+                  <%=tag.name%>
+                </button>
+
+                <% }); %>
+
+            </div>
+
+            <p class="mediumText textPadding textCentered" style="margin-top: 10%;"> Descrição do vídeo: </p>
+
+            <div class="videoDescriptionContainer textPadding">
+              <p class="limitedText text textVerticalPadding">
+                <%= video.description %>
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
-
-        <div>
-          <button class="reactionButtonOff" id="please" title="Eu quero que outras pessoas vejam esse vídeo!">
-            <img alt="📣">
-          </button>
-          <p class="textCentered mediumText"> 0 </p>
-
-        </div>
-
-        <div>
-          <button class="reactionButtonOff" id="dislike" title="Não gostei desse vídeo!">
-            <img alt="💔">
-          </button>
-          <p class="textCentered  mediumText"> 0 </p>
-        </div>
-
-      </div>
-
-      <div class="inputBox halfWidth hcenter horizontalFlex">
-        <% tags.forEach(function(tag) { %>
-
-          <button class="enabledTagButton" style="background-color: <%= tag.color %>">
-            <%=tag.name%>
-          </button>
-
-          <% }); %>
-
-      </div>
-
-      <p class="mediumText textPadding textCentered" style="margin-top: 10%;"> Descrição do vídeo: </p>
-
-      <div class="videoDescriptionContainer textPadding">
-        <p class="limitedText text textVerticalPadding">
-          <%= video.description %>
-        </p>
-
-      </div>
-
-    </div>
-
+      </main>
   </div>
 
-
-  <button class="returnButton textCentered"> Ver mais vídeos </button>
-  <script>  </script>
 </body>
 
 </html>

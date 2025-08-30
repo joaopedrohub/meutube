@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/texting.css' />
+    <link rel='stylesheet' href='/stylesheets/videoing.css' />
+    <link rel='stylesheet' href='/stylesheets/containers.css'>
+    <link rel='stylesheet' href='/stylesheets/positioning.css'>
+    <link rel='stylesheet' href='/stylesheets/imaging.css'>
+    <link rel='stylesheet' href='/stylesheets/inputs.css'>
+    <script src="/javascripts/configurations.js"> </script>
+</head>
+
+<body class="staticBody">
+    <div class="horizontalFlex">
+        <%- include('./partials/sidebar') %>
+            <main class="main">
+                <div class="verticalFlex hcenter tenPadding">
+                    <div>
+                        <h1 class="text"> Conta </h1>
+                        <button class="myButton" id="leaveChannel"> Sair do canal</button>
+                        <button class="myButton" id="deleteChannel"> Deletar canal</button>
+
+
+                    </div>
+                </div>
+            </main>
+    </div>
+</body>
+
+</html>

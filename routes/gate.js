@@ -2,14 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 const jwt = require("jsonwebtoken")
-const { authTokenMiddleware, secretKey } = require('../models/Authenticator')
 const Validator = require("../models/Validator")
-const Channel = require("../models/Channel")
-
-
-
+const secretKey = process.env.SECRET_KEY
 const validator = new Validator()
 const hexColorRegex = /^#[0-9A-F]{6}$/i
+
+const getUserChannelMiddleware = require("../middlewares/authentication/getUserChannelMiddleware")
 
 router.get('/signin', function (req, res, next) {
     res.render("signin")
@@ -39,14 +37,17 @@ router.post('/signin', async function (req, res) {
         } catch (error) {
             console.error(error)
             res.status(500).json({ reason: "Um erro ocorreu ao criar a sua conta. Tente novamente." })
+            return
         }
 
         if (nameTaken) {
             res.status(401).json({ reason: "Outro canal já tem esse nome." })
+            return
         }
 
         if (!body.color.match(validator.hexColorRegex)) {
             res.status(400).json({ reason: "A cor que você mandou não é um hex válido." })
+            return
         }
 
         let newChannel
@@ -74,12 +75,12 @@ router.post('/signin', async function (req, res) {
 
             const token = jwt.sign(channelPayload, secretKey, { expiresIn: '24h' })
             res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: false,
-                    maxAge: 60 * 60 * 24 * 1000,
-                    path: "/"
+                httpOnly: true,
+                secure: false,
+                maxAge: 60 * 60 * 24 * 1000,
+                path: "/"
 
-                })
+            })
             res.status(200).redirect("/")
         }
 
@@ -133,7 +134,7 @@ router.post('/login', async function (req, res) {
         } else {
             res.sendStatus(401)
         }
-        
+
 
 
 
@@ -143,5 +144,14 @@ router.post('/login', async function (req, res) {
     }
 })
 
+router.post('/logout', function (req, res) {
+    res.cookie("token", '', {
+        expires: new Date(0),
+        secure: false,
+        httpOnly: true,
+        path: '/'
+    })
+    res.sendStatus(204)
+})
 
 module.exports = router;

@@ -3,7 +3,8 @@ var router = express.Router();
 
 const VideoCardInfo = require("../models/VideoCardInfo")
 
-const { authTokenMiddleware } = require('../models/Authenticator');
+
+const getUserChannelMiddleware = require('../middlewares/authentication/getUserChannelMiddleware');
 
 router.get('/:channelName', async function (req, res, next) {
 
@@ -49,9 +50,59 @@ router.get('/:channelName', async function (req, res, next) {
 
 });
 
-router.get('/', authTokenMiddleware, function (req, res, next) {
+router.delete('/', getUserChannelMiddleware, async function (req, res, next) {
 
-    res.redirect("http://localhost:3000/channel/" + req.channel.name)
+    const prisma = require("../prisma/client")
+
+    if (!req.channel) {
+        return
+    }
+
+    let channelToDelete
+    try {
+        channelToDelete = await prisma.channel.findFirst({ where: { name: req.params.channelName } })
+    } catch (error) {
+        console.log(error)
+        res.status(404).render('videoNotFound')
+    }
+
+    if (channelToDelete) {
+        if (req.channel.admin || req.channel.id == channelToDelete.id) {
+            try {
+                //primeiro deletar todos os vídeos do canal 
+                await prisma.video.deleteMany({
+                    where: { channel: channelToDelete }
+                })
+                await prisma.channel.delete({
+                    where: { id: channelToDelete.id }
+                })
+
+            } catch (error) {
+                console.log(error)
+                res.sendStatus(500)
+            }
+
+            res.cookie("token", '', {
+                expires: new Date(0),
+                secure: false,
+                httpOnly: true,
+                path: '/'
+            })
+
+            res.sendStatus(204)
+        }
+    } else {
+        res.sendStatus(404)
+    }
+})
+
+router.get('/', getUserChannelMiddleware, function (req, res, next) {
+
+    if (req.channel) {
+        res.redirect("/channel/" + req.channel.name)
+    } else {
+        res.render("unlogged")
+    }
     //pegar o cookie se tiver e levar o cara pro canal dele 
 })
 

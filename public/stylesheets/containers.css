@@ -45,6 +45,10 @@
 
 }
 
+.sidebar a {
+    text-decoration: none;
+}
+
 .sidebar li {
     width: 100%;
     list-style-type: none;

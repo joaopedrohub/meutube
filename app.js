@@ -11,6 +11,7 @@ var theaterRouter = require("./routes/theater");
 var studioRouter = require("./routes/studio");
 var gateRouter = require("./routes/gate")
 var channelRouter = require("./routes/channel")
+let configurationsRouter = require("./routes/configurations")
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/theater', theaterRouter);
 app.use('/studio', studioRouter);
 app.use('/gate', gateRouter)
 app.use('/channel', channelRouter)
+app.use("/configurations", configurationsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

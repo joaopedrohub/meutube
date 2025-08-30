@@ -1,7 +1,8 @@
 let express = require('express');
 let router = express.Router();
 const jwt = require('jsonwebtoken');
-const isLoggedMiddleware = require("../middlewares/authentication/isLoggedMiddleware")
+const isLoggedMiddleware = require("../middlewares/authentication/isLoggedMiddleware");
+const getUserChannelMiddleware = require('../middlewares/authentication/getUserChannelMiddleware');
 
 router.get('/:videoId', isLoggedMiddleware, async function (req, res, next) {
   const prisma = require('../prisma/client')
@@ -16,12 +17,12 @@ router.get('/:videoId', isLoggedMiddleware, async function (req, res, next) {
     const videoURL = video.videoFileName
 
     if (channel) {
-      
+
       if (req.logged) {
 
         prisma.video.update({
-          where: {id: videoId},
-          data: {views: {increment: 1}}
+          where: { id: videoId },
+          data: { views: { increment: 1 } }
         }).catch((reason) => console.error("Erro ao incrementar visualização: " + reason))
 
       }
